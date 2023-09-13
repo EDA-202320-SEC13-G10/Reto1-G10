@@ -70,8 +70,8 @@ def load_data(control):
     Carga los datos
     """
     #TODO: Realizar la carga de datos
-    result = controller.load_data(control) 
-    return result
+    result, goalscorers, shootouts= controller.load_data(control) 
+    return result, goalscorers, shootouts
 
 def print_data(control, id):
     """
@@ -79,18 +79,25 @@ def print_data(control, id):
     """
     #TODO: Realizar la función para imprimir un elemento
     pass
-
-def print_req_1(control):
+def print_carga(control):
     """
         Función que imprime la soluci1ón del Requerimiento 1 en consola
         Imprime los 3 primeros y los 3 ultimos cargados de los 3 archivos .
 
         control: la estrcutura de datos a cargar.
-    """
-    
+    """   
     # TODO: Imprimir el resultado del requerimiento 1
-    rt , gl , sh = controller.sizedtos(control)
-    l1, l2,l3 = controller.primeros(control)
+
+    rt = controller.sizedtos(control,"results")
+    gl = controller.sizedtos(control,"goalscorers")
+    sh = controller.sizedtos(control,"shootouts")
+
+    l1 = controller.primeros_ultimos(control,"results")
+    l2= controller.primeros_ultimos(control,"goalscorers")
+    l3 = controller.primeros_ultimos(control,"shootouts")
+    o = control["model"]["results"]
+    print(tabulate(o["elements"] , headers = "keys" , tablefmt='grid'))
+
     print(('Match results count: ' + str(rt)).center(130))
     print(('Goal scorers count: ' + str(gl)).center(130))
     print(('Shootouts-penalty definition count: ' + str(sh)).center(130))
@@ -122,13 +129,24 @@ def print_req_1(control):
     print("Results struct has more than 6 records...")
     print(tabulate(l3["elements"], headers = "keys" , tablefmt='grid'))
 
+
+
+
+def print_req_1(control,pais,tipolocal,n):
+    l1,l2=controller.req_1(control,pais,tipolocal,n)
+    print(tabulate(l1["elements"], headers = "keys" , tablefmt='grid') )
+    print(l2)
     
-def print_req_2(control):
+    
+def print_req_2(control , nombre, n):
     """
-        Función que imprime la solución del Requerimiento 2 en consola
+        Función que imprime la solución del Requerimiento 2 
+        en consola
     """
-    # TODO: Imprimir el resultado del requerimiento 2
-    pass
+    l1,l2=controller.req_2(control,nombre,n)
+    print(tabulate(l1["elements"], headers = "keys" , tablefmt='grid') )
+    print(l2)
+    
 
 
 def print_req_3(control):
@@ -143,7 +161,7 @@ def print_req_4(control):
     """
         Función que imprime la solución del Requerimiento 4 en consola
     """
-    # TODO: Imprimir el resultado del requerimiento 4
+    # TODO: Imprimir el resultado del requerimiento 41
     pass
 
 
@@ -181,7 +199,6 @@ def print_req_8(control):
 
 # Se crea el controlador asociado a la vista
 control = new_controller()
-
 # main del reto
 if __name__ == "__main__":
     """
@@ -196,12 +213,15 @@ if __name__ == "__main__":
             print("".center(130,"-"))
             print("Cargando información de los archivos ....".center(130))
             print("".center(130,"-"))
-            print(print_req_1(control))
+            results , goalscorers , shootouts = load_data(control)
+            print(controller )
+            print(print_carga(control))
+            
         elif int(inputs) == 2:
-            print_req_1(control)
+            print_req_1(control,"italy","home",15)
 
         elif int(inputs) == 3:
-            print_req_2(control)
+            print_req_2(control, "Cristiano Ronaldo" , 7)
 
         elif int(inputs) == 4:
             print_req_3(control)

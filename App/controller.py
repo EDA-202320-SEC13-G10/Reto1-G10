@@ -42,40 +42,58 @@ def new_controller():
     control["model"] = model.new_data_structs()
     return control
 
+
 # Funciones para la carga de datos
+
 
 def load_data(control):
     
     """
     Carga los datos del reto
     """
-    filenameR = "football/results-utf8-small.csv"
-    filenameG = "football/goalscorers-utf8-small.csv"
-    filenameS = "football/shootouts-utf8-small.csv"
     #TODO: Realizar la carga de datos
     dtos = control["model"]
-    resultss  = loaddata(dtos,filenameR, "results")
-    resultss1  = loaddata(dtos,filenameG , "goalscorers")
-    resultss2  = loaddata(dtos , filenameS , "shootouts"  )
-    sort(resultss)
-    return resultss , resultss1 , resultss2
+    results = loadRasults(dtos)
+    goalscorers  = loadGoalscorers(dtos)
+    shootouts  = loadShootouts(dtos)
+    return model.sorter_date_country(results) , goalscorers , shootouts
+
+def loadRasults(dtos):
+    filename = "football/results-utf8-small.csv"
+    file = cf.data_dir + filename
+    input_file = csv.DictReader(open(file , encoding='utf-8'))
+    for data in input_file:
+        model.add_Results(dtos,data)
+    return dtos["results"]
+
+
+def loadGoalscorers(dtos):
+    filename = "football/goalscorers-utf8-small.csv"
+    file = cf.data_dir + filename
+    input_file = csv.DictReader(open(file , encoding='utf-8'))
+    for data in input_file:
+        model.add_Goalscorers(dtos,data)
+    return dtos["goalscorers"]
+
+
+def loadShootouts(dtos):
+    filename = "football/shootouts-utf8-small.csv"
+    file = cf.data_dir + filename
+    input_file = csv.DictReader(open(file , encoding='utf-8'))
+    for data in input_file:
+        model.add_Shootouts(dtos,data)
+    return dtos["shootouts"]
+
 
 # Funciones de ordenamiento
 
-def loaddata(dtos , filename, poci):
-    file = cf.data_dir + filename
-    input_file = csv.DictReader(open(file , encoding='utf-8'))
-    for date in input_file:
-        model.add_dataR(dtos,date,poci)
-    return dtos[poci]
+def sizedtos(control,posi):
+    pos = control["model"]
+    return model.data_size(pos[posi])
 
-def sizedtos(dtos):
-    r1 , r2, r3, = load_data(dtos)
-    return model.dtosSize(r1), model.dtosSize(r2) , model.dtosSize(r3)
-
-def primeros(dtos):
-    r1 , r2, r3, = load_data(dtos)     
-    return model.sublista(r1, 1 , 3) , model.sublista(r2, 1 , 3) , model.sublista(r3, 1 , 3)
+def primeros_ultimos(control, posi):
+    dtos = control["model"]     
+    return model.first_last3(dtos[posi]) 
 
 def sort(control):
     """
@@ -95,20 +113,33 @@ def get_data(control, id):
     pass
 
 
-def req_1(control):
+def req_1(control, pais, tipolocal, n):
     """
     Retorna el resultado del requerimiento 1
     """
     # TODO: Modificar el requerimiento 1
-    pass
+    x , y, z = load_data(control)
+    
+    h = model.req_1(x , pais , tipolocal )
+    size= model.data_size(h)
+    sublista = model.sublista(h,1,n)
+    return sublista, model.data_size(sublista)
+    
 
 
-def req_2(control):
+
+def req_2(control, nombre, n):
     """
     Retorna el resultado del requerimiento 2
     """
-    # TODO: Modificar el requerimiento 2
-    pass
+    x , y, z = load_data(control)
+    h = model.req_2(y, nombre)
+    s = model.data_size(h)
+    if  n > 6:
+        return model.first_last3(h) , s
+    else:
+        return model.sublista(h,(s+1)-s,s) , s
+        
 
 
 def req_3(control):

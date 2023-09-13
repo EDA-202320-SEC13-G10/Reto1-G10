@@ -26,6 +26,7 @@
 
 
 import config as cf
+import time
 from DISClib.ADT import list as lt
 from DISClib.ADT import stack as st
 from DISClib.ADT import queue as qu
@@ -65,19 +66,50 @@ def new_data_structs():
 
 # Funciones para agregar informacion al modelo
 
-def add_dataR(data_structs, data , posci):
+def add_Results(data_structs,data):
     """
     Función para agregar nuevos elementos a la lista
     """
     #TODO: Crear la función para agregar elementos
-    lt.addLast(data_structs[posci],data)
+    lt.addLast(data_structs["results"],data)
     return data_structs
 # Funciones para creacion de datos
 
+def add_Goalscorers(data_structs,data):
+    """
+    Función para agregar nuevos elementos a la lista
+    """
+    #TODO: Crear la función para agregar elementos
+    lt.addLast(data_structs["goalscorers"],data)
+    return data_structs
 
-def sublista(data_structs, pos_i , num):
-    sublista = lt.subList(data_structs ,pos_i,num)
+
+def add_Shootouts(data_structs,data):
+    """
+    Función para agregar nuevos elementos a la lista
+    """
+    #TODO: Crear la función para agregar elementos
+    lt.addLast(data_structs["shootouts"],data)
+    return data_structs
+
+def sorter_date_country(data_structs):
+    merg.sort(data_structs,compare_dates)
+
+
+def sublista(data_structs, pos_i, num):
+    sublista =  lt.subList(data_structs, pos_i, num)
     return sublista
+
+
+
+def first_last3(data_structs):
+    primeros = sublista(data_structs,1,3)
+    ultimos = sublista(data_structs,data_size(data_structs)-2,3)
+    for i in lt.iterator(ultimos):
+        lt.addLast(primeros,i)
+    return primeros
+
+
 
 def new_data(id, info):
     """
@@ -87,7 +119,13 @@ def new_data(id, info):
     pass
 
 
+
 # Funciones de consulta
+def get_data_pos(data_structs,pos):
+    data = lt.getElement(data_structs,pos)
+    return data
+
+
 
 def get_data(data_structs, id):
     """
@@ -97,28 +135,61 @@ def get_data(data_structs, id):
     pass
 
 
+
 def data_size(data_structs):
     """
     Retorna el tamaño de la lista de datos
     """
-    #TODO: Crear la función para obtener el tamaño de una lista
-    pass
+    return lt.size(data_structs)
 
 
-def req_1(data_structs):
+
+def req_1(data_structs, pais, tipolocal ) :
     """
     Función que soluciona el requerimiento 1
     """
     # TODO: Realizar el requerimiento 1
-    pass
+    nl= lt.newList("ARRAY_LIST")
+    if tipolocal.lower() == "home":
+        tipolocal = "home_team"
+    else:
+        tipolocal = "away_team"
+    for i in lt.iterator(data_structs):
+        x= {}
+        if i[tipolocal].lower() == pais:
+            x["date"] = i["date"] 
+            x["home_team"] = i["home_team"] 
+            x["away_team"] = i["away_team"] 
+            x["home_score"] = i["home_score"] 
+            x["away_score"] = i["away_score"] 
+            x["country"] = i["country"] 
+            x["city"] = i["city"] 
+            x["tournament"] = i["tournament"] 
+            lt.addLast(nl, x)
+    return nl
 
+    
 
-def req_2(data_structs):
+def req_2(data_structs , nombre):
     """
     Función que soluciona el requerimiento 2
     """
-    # TODO: Realizar el requerimiento 2
-    pass
+    nl= lt.newList("ARRAY_LIST")
+    
+    for i in lt.iterator(data_structs):
+        x= {}
+        if i["scorer"].lower() == nombre.lower():
+            x["date"] = i["date"] 
+            x["home_team"] = i["home_team"] 
+            x["away_team"] = i["away_team"]     
+            x["team"] = i["team"]     
+            x["scorer"] = i["scorer"]     
+            x["minute"] = i["minute"]     
+            x["own_goal"] = i["own_goal"]     
+            x["penalty"] = i["penalty"]     
+            lt.addLast(nl, x)
+    return nl
+
 
 
 def req_3(data_structs):
@@ -126,7 +197,7 @@ def req_3(data_structs):
     Función que soluciona el requerimiento 3
     """
     # TODO: Realizar el requerimiento 3
-    pass
+    
 
 
 def req_4(data_structs):
@@ -170,8 +241,7 @@ def req_8(data_structs):
 
 
 # Funciones utilizadas para comparar elementos dentro de una lista
-def dtosSize(data_structs):
-    return lt.size(data_structs)
+
 
 def compare(data_1, data_2):
     """
@@ -181,8 +251,27 @@ def compare(data_1, data_2):
     pass
 
 # Funciones de ordenamiento
+def compare_dates(data_1,  data_2):
+    pos = True
+    x = (data_1["date"])
+    y = (data_2["date"])
+    first = time.strptime(x, "%Y-%m-%d")
+    second = time.strptime(y, "%Y-%m-%d")
+    if first > second:
+        if data_1["country"] > data_2["country"] :
+            pos = True
+    else:
+        pos =  False
+    return pos
+def compare_dates2(data_1,  data_2):
+    x = (data_1["date"])
+    y = (data_2["date"])
+    first = time.strptime(x, "%Y-%m-%d")
+    second = time.strptime(y, "%Y-%m-%d")
+    return first < second
 
-
+    
+    
 def sort_criteria(data_1, data_2):
     """sortCriteria criterio de ordenamiento para las funciones de ordenamiento
 
