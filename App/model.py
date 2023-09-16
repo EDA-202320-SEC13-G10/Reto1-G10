@@ -57,7 +57,7 @@ def new_data_structs():
         "goalscorers" : None,
         "shootouts" : None
             }
-    dtos["results"] = lt.newList('ARRAY_LIST')
+    dtos["results"] = lt.newList("ARRAY_LIST")
     dtos["goalscorers"] = lt.newList('ARRAY_LIST')
     dtos["shootouts"] = lt.newList('ARRAY_LIST')
 
@@ -65,6 +65,7 @@ def new_data_structs():
 
 
 # Funciones para agregar informacion al modelo
+
 
 def add_Results(data_structs,data):
     """
@@ -92,13 +93,19 @@ def add_Shootouts(data_structs,data):
     lt.addLast(data_structs["shootouts"],data)
     return data_structs
 
-def sorter_date_country(data_structs):
-    merg.sort(data_structs,compare_dates)
-
+#LAB 4
+def sorter_date_country(data_structs,tipo):
+    if tipo == 1:
+        se.sort(data_structs,cmp_partidos_by_fecha_y_pais)
+    if tipo == 2:
+        ins.sort(data_structs,cmp_partidos_by_fecha_y_pais)
+    if tipo == 3:
+        se.sort(data_structs,cmp_partidos_by_fecha_y_pais)
+    return data_structs
 
 def sublista(data_structs, pos_i, num):
-    sublista =  lt.subList(data_structs, pos_i, num)
-    return sublista
+    s =  lt.subList(data_structs, pos_i, num)
+    return s
 
 
 
@@ -109,8 +116,6 @@ def first_last3(data_structs):
         lt.addLast(primeros,i)
     return primeros
 
-
-
 def new_data(id, info):
     """
     Crea una nueva estructura para modelar los datos
@@ -118,14 +123,10 @@ def new_data(id, info):
     #TODO: Crear la función para estructurar los datos
     pass
 
-
-
 # Funciones de consulta
 def get_data_pos(data_structs,pos):
     data = lt.getElement(data_structs,pos)
     return data
-
-
 
 def get_data(data_structs, id):
     """
@@ -134,15 +135,11 @@ def get_data(data_structs, id):
     #TODO: Crear la función para obtener un dato de una lista
     pass
 
-
-
 def data_size(data_structs):
     """
     Retorna el tamaño de la lista de datos
     """
     return lt.size(data_structs)
-
-
 
 def req_1(data_structs, pais, tipolocal ) :
     """
@@ -155,47 +152,37 @@ def req_1(data_structs, pais, tipolocal ) :
     else:
         tipolocal = "away_team"
     for i in lt.iterator(data_structs):
-        x= {}
-        if i[tipolocal].lower() == pais:
-            x["date"] = i["date"] 
-            x["home_team"] = i["home_team"] 
-            x["away_team"] = i["away_team"] 
-            x["home_score"] = i["home_score"] 
-            x["away_score"] = i["away_score"] 
-            x["country"] = i["country"] 
-            x["city"] = i["city"] 
-            x["tournament"] = i["tournament"] 
-            lt.addLast(nl, x)
+        if i[tipolocal].lower() == pais.lower():
+            lt.addLast(nl, i)
     return nl
-
-    
 
 def req_2(data_structs , nombre):
     """
     Función que soluciona el requerimiento 2
     """
     nl= lt.newList("ARRAY_LIST")
-    
     for i in lt.iterator(data_structs):
-        x= {}
-        if i["scorer"].lower() == nombre.lower():
-            x["date"] = i["date"] 
-            x["home_team"] = i["home_team"] 
-            x["away_team"] = i["away_team"]     
-            x["team"] = i["team"]     
-            x["scorer"] = i["scorer"]     
-            x["minute"] = i["minute"]     
-            x["own_goal"] = i["own_goal"]     
-            x["penalty"] = i["penalty"]     
-            lt.addLast(nl, x)
+        if i["scorer"] == nombre:
+            lt.addLast(nl,i)
     return nl
 
 
 
-def req_3(data_structs):
+def req_3(data_structs, date_i, date_f):
     """
     Función que soluciona el requerimiento 3
     """
+
+    first = time.strptime(date_i, "%Y-%m-%d")
+    second = time.strptime(date_f, "%Y-%m-%d")
+
+
+    nl= lt.newList("ARRAY_LIST")
+    for i in lt.iterator(data_structs):
+        date_actual = time.strptime(i["date"], "%Y-%m-%d")
+        if date_actual > first and date_actual < second:
+            lt.addLast(nl,i)
+    return nl
     # TODO: Realizar el requerimiento 3
     
 
@@ -251,7 +238,7 @@ def compare(data_1, data_2):
     pass
 
 # Funciones de ordenamiento
-def compare_dates(data_1,  data_2):
+def cmp_partidos_by_fecha_y_pais (data_1,  data_2):
     pos = True
     x = (data_1["date"])
     y = (data_2["date"])
@@ -263,7 +250,7 @@ def compare_dates(data_1,  data_2):
     else:
         pos =  False
     return pos
-def compare_dates2(data_1,  data_2):
+def compare_dates_inter(data_1,  data_2):
     x = (data_1["date"])
     y = (data_2["date"])
     first = time.strptime(x, "%Y-%m-%d")

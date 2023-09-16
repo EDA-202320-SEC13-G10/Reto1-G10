@@ -62,6 +62,7 @@ def print_menu():
     print("7- Ejecutar Requerimiento 6")
     print("8- Ejecutar Requerimiento 7")
     print("9- Ejecutar Requerimiento 8")
+    print("10- Define el tipo de de lista en la estructura.")
     print("0- Salir")
 
 
@@ -92,11 +93,9 @@ def print_carga(control):
     gl = controller.sizedtos(control,"goalscorers")
     sh = controller.sizedtos(control,"shootouts")
 
-    l1 = controller.primeros_ultimos(control,"results")
-    l2= controller.primeros_ultimos(control,"goalscorers")
-    l3 = controller.primeros_ultimos(control,"shootouts")
-    o = control["model"]["results"]
-    print(tabulate(o["elements"] , headers = "keys" , tablefmt='grid'))
+    l1 = controller.primeros_ultimos(control["model"]["results"])
+    l2= controller.primeros_ultimos(control["model"]["goalscorers"])
+    l3 = controller.primeros_ultimos(control["model"]["shootouts"])
 
     print(('Match results count: ' + str(rt)).center(130))
     print(('Goal scorers count: ' + str(gl)).center(130))
@@ -134,7 +133,7 @@ def print_carga(control):
 
 def print_req_1(control,pais,tipolocal,n):
     l1,l2=controller.req_1(control,pais,tipolocal,n)
-    print(tabulate(l1["elements"], headers = "keys" , tablefmt='grid') )
+    print(tabulate(l1["elements"], headers = "keys" , tablefmt='grid'))
     print(l2)
     
     
@@ -144,7 +143,7 @@ def print_req_2(control , nombre, n):
         en consola
     """
     l1,l2=controller.req_2(control,nombre,n)
-    print(tabulate(l1["elements"], headers = "keys" , tablefmt='grid') )
+    print(tabulate(l1["elements"], headers = "keys", tablefmt='grid'))
     print(l2)
     
 
@@ -196,6 +195,13 @@ def print_req_8(control):
     # TODO: Imprimir el resultado del requerimiento 8
     pass
 
+def print_req_9(control,tipo):
+
+    dts , tiempo =  controller.tipo_sort(control,tipo)
+    print(tabulate(dts["elements"], headers = "keys", tablefmt='grid'))
+    print(tiempo)
+
+    
 
 # Se crea el controlador asociado a la vista
 control = new_controller()
@@ -214,14 +220,13 @@ if __name__ == "__main__":
             print("Cargando información de los archivos ....".center(130))
             print("".center(130,"-"))
             results , goalscorers , shootouts = load_data(control)
-            print(controller )
             print(print_carga(control))
             
         elif int(inputs) == 2:
-            print_req_1(control,"italy","home",15)
+            print_req_1(control,"Solomon Islands","home",15)
 
         elif int(inputs) == 3:
-            print_req_2(control, "Cristiano Ronaldo" , 7)
+            print_req_2(control, "Son Heung-min" , 7)
 
         elif int(inputs) == 4:
             print_req_3(control)
@@ -240,6 +245,10 @@ if __name__ == "__main__":
 
         elif int(inputs) == 9:
             print_req_8(control)
+
+        elif int(inputs) == 10:
+            tipo =  input("Define el tipo de lista: \n 1- para Slection \n 2- para Insertion  \n 3-Para shell")
+            print_req_9(control,tipo)
 
         elif int(inputs) == 0:
             working = False

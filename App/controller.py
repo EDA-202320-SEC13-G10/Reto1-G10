@@ -44,7 +44,13 @@ def new_controller():
 
 
 # Funciones para la carga de datos
-
+def tipo_sort(control,tipo):
+    r =  control["model"]["results"]
+    start_time =  get_time()
+    model.sorter_date_country(r,tipo)
+    end_time = get_time()
+    delta = delta_time(start_time,end_time)
+    return  r , delta
 
 def load_data(control):
     
@@ -56,7 +62,9 @@ def load_data(control):
     results = loadRasults(dtos)
     goalscorers  = loadGoalscorers(dtos)
     shootouts  = loadShootouts(dtos)
-    return model.sorter_date_country(results) , goalscorers , shootouts
+    return results , goalscorers , shootouts
+
+
 
 def loadRasults(dtos):
     filename = "football/results-utf8-small.csv"
@@ -65,6 +73,7 @@ def loadRasults(dtos):
     for data in input_file:
         model.add_Results(dtos,data)
     return dtos["results"]
+
 
 
 def loadGoalscorers(dtos):
@@ -91,17 +100,8 @@ def sizedtos(control,posi):
     pos = control["model"]
     return model.data_size(pos[posi])
 
-def primeros_ultimos(control, posi):
-    dtos = control["model"]     
-    return model.first_last3(dtos[posi]) 
-
-def sort(control):
-    """
-    Ordena los datos del modelo
-    """
-    #TODO: Llamar la función del modelo para ordenar los datos
-    pass
-
+def primeros_ultimos(control):
+    return model.first_last3(control) 
 
 # Funciones de consulta sobre el catálogo
 
@@ -113,17 +113,16 @@ def get_data(control, id):
     pass
 
 
-def req_1(control, pais, tipolocal, n):
+def req_1(control, pais, tipolocal, tamanio):
     """
     Retorna el resultado del requerimiento 1
     """
     # TODO: Modificar el requerimiento 1
-    x , y, z = load_data(control)
-    
-    h = model.req_1(x , pais , tipolocal )
-    size= model.data_size(h)
-    sublista = model.sublista(h,1,n)
-    return sublista, model.data_size(sublista)
+    result =  control["model"]["results"]
+    rq1model = model.req_1(result , pais , tipolocal)
+    size= model.data_size(rq1model)
+
+    return  rq1model, size
     
 
 
@@ -132,14 +131,10 @@ def req_2(control, nombre, n):
     """
     Retorna el resultado del requerimiento 2
     """
-    x , y, z = load_data(control)
-    h = model.req_2(y, nombre)
-    s = model.data_size(h)
-    if  n > 6:
-        return model.first_last3(h) , s
-    else:
-        return model.sublista(h,(s+1)-s,s) , s
-        
+    goalscorers = control["model"]["goalscorers"]
+    rq2model = model.req_2(goalscorers, nombre)
+    size = model.data_size(rq2model)
+    return rq2model, size
 
 
 def req_3(control):
