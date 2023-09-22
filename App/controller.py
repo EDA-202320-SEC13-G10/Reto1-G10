@@ -44,13 +44,6 @@ def new_controller():
 
 
 # Funciones para la carga de datos
-def tipo_sort(control,tipo):
-    r =  control["model"]["results"]
-    start_time =  get_time()
-    model.sorter_date_country(r,tipo)
-    end_time = get_time()
-    delta = delta_time(start_time,end_time)
-    return  r , delta
 
 def load_data(control):
     
@@ -62,7 +55,7 @@ def load_data(control):
     results = loadRasults(dtos)
     goalscorers  = loadGoalscorers(dtos)
     shootouts  = loadShootouts(dtos)
-    return results , goalscorers , shootouts
+    return model.sorter_date_country(results) , goalscorers , shootouts
 
 
 
@@ -113,7 +106,7 @@ def get_data(control, id):
     pass
 
 
-def req_1(control, pais, tipolocal, tamanio):
+def req_1(control, pais, tipolocal, n):
     """
     Retorna el resultado del requerimiento 1
     """
@@ -121,10 +114,19 @@ def req_1(control, pais, tipolocal, tamanio):
     result =  control["model"]["results"]
     rq1model = model.req_1(result , pais , tipolocal)
     size= model.data_size(rq1model)
-
-    return  rq1model, size
+    if size > n:
+        size = n
+        rq1model =  model.sublista(rq1model,1,size)
     
+    if size > 6:
+        rq1model =  model.first_last3(rq1model)
+    return  rq1model, size
 
+    
+def paises(control):
+    goalscorers = control["model"]["goalscorers"]
+    paises = model.top_scorer(control)
+    return paises
 
 
 def req_2(control, nombre, n):
@@ -134,15 +136,26 @@ def req_2(control, nombre, n):
     goalscorers = control["model"]["goalscorers"]
     rq2model = model.req_2(goalscorers, nombre)
     size = model.data_size(rq2model)
+    if size > n:
+        size = n
+    rq2model =  model.sublista(rq2model,1,size)
+    if size < 6:
+        rq2model =  rq2model
+    else:
+        rq2model =  model.first_last3(rq2model)
+
     return rq2model, size
 
 
-def req_3(control):
+def req_3(control,date_i, date_f , team):
     """
     Retorna el resultado del requerimiento 3
     """
+    dtos, home_matchs, away_matchs =  model.req_3(control,date_i, date_f , team)
     # TODO: Modificar el requerimiento 3
-    pass
+    total = home_matchs + away_matchs
+    
+    return dtos, home_matchs, away_matchs, total
 
 
 def req_4(control):
@@ -153,12 +166,13 @@ def req_4(control):
     pass
 
 
-def req_5(control):
+def req_5(control, date_i, date_f , nombre):
     """
     Retorna el resultado del requerimiento 5
     """
     # TODO: Modificar el requerimiento 5
-    pass
+    nl, penalty, own_goal  = model.req_5(control, date_i, date_f , nombre)
+    return nl, penalty, own_goal
 
 def req_6(control):
     """

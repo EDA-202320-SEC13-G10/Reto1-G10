@@ -93,15 +93,10 @@ def add_Shootouts(data_structs,data):
     lt.addLast(data_structs["shootouts"],data)
     return data_structs
 
-#LAB 4
-def sorter_date_country(data_structs,tipo):
-    if tipo == 1:
-        se.sort(data_structs,cmp_partidos_by_fecha_y_pais)
-    if tipo == 2:
-        ins.sort(data_structs,cmp_partidos_by_fecha_y_pais)
-    if tipo == 3:
-        se.sort(data_structs,cmp_partidos_by_fecha_y_pais)
-    return data_structs
+
+def sorter_date_country(control):
+    merg.sort(control,cmp_partidos_by_fecha_y_pais)
+    return control
 
 def sublista(data_structs, pos_i, num):
     s =  lt.subList(data_structs, pos_i, num)
@@ -168,22 +163,48 @@ def req_2(data_structs , nombre):
 
 
 
-def req_3(data_structs, date_i, date_f):
+def req_3(data_structs, date_i, date_f , team):
     """
     Función que soluciona el requerimiento 3
     """
-
+    results = data_structs["model"]["results"]
+    goalscorers = data_structs["model"]["goalscorers"]
     first = time.strptime(date_i, "%Y-%m-%d")
     second = time.strptime(date_f, "%Y-%m-%d")
-
-
     nl= lt.newList("ARRAY_LIST")
-    for i in lt.iterator(data_structs):
+    home_matchs = 0
+    away_matchs = 0
+    for i in lt.iterator(results):
         date_actual = time.strptime(i["date"], "%Y-%m-%d")
         if date_actual > first and date_actual < second:
-            lt.addLast(nl,i)
-    return nl
+                    if i["home_team"].lower() == team.lower()or i["away_team"].lower() == team.lower():
+                        if i["home_team"].lower() == team.lower():
+                            home_matchs += 1
+                        else:
+                            away_matchs += 1
+                        lt.addLast(nl,i)
+    ne= lt.newList("ARRAY_LIST")
+    for i in lt.iterator(nl):
+        x = {}
+        for j in lt.iterator(goalscorers):
+            if i["date"] == j["date"]:
+                if ["home_team"] == j["home_team"]:
+                    x["date"] = j["date"]
+                    x["home_team"] = j["home_team"]
+                    x["away_team"] = j["away_team"]
+                    x["home_score"] = i["home_score"]
+                    x["away_score"] = i["away_score"]
+                    x["country"] = i["country"]
+                    x["city"] = i["city"]
+                    x["tournament"] = i["tournament"]
+                    x["penalty"] = j["penalty"]
+                    x["own_goal"] = j["own_goal"]
+                    lt.addLast(ne,x)
     # TODO: Realizar el requerimiento 3
+    
+    return ne, home_matchs, away_matchs
+
+
     
 
 
@@ -191,25 +212,81 @@ def req_4(data_structs):
     """
     Función que soluciona el requerimiento 4
     """
-    # TODO: Realizar el requerimiento 4
-    pass
-
-
-def req_5(data_structs):
-    """
-    Función que soluciona el requerimiento 5
-    """
     # TODO: Realizar el requerimiento 5
     pass
 
+def req_5(data_structs, date_i, date_f , nombre):
+    """
+    Función que soluciona el requerimiento 5
+    """
+    # TODO: Realizar el requerimiento 4
+    results = data_structs["model"]["results"]
+    goalscorers = data_structs["model"]["goalscorers"]
+    first = time.strptime(date_i, "%Y-%m-%d")
+    second = time.strptime(date_f, "%Y-%m-%d")
+    nl= lt.newList("ARRAY_LIST")
+    penalty = 0
+    own_goal = 0
+    for i in lt.iterator(goalscorers):
+        date_actual = time.strptime(i["date"], "%Y-%m-%d")
+        if date_actual > first and date_actual < second:
+                    if i["scorer"].lower() == nombre.lower():
+                        if i["penalty"] == "True":
+                            penalty += 1
+                        if i["own_goal"] == "True":
+                            own_goal += 1
+                        lt.addLast(nl,i)
+    return nl, penalty, own_goal                     
 
-def req_6(data_structs):
+
+def req_6(data_structs , tamanio,  date_i, date_f, torneo):
+
     """
     Función que soluciona el requerimiento 6
     """
     # TODO: Realizar el requerimiento 6
-    pass
+    results =sorter_date_country(data_structs["model"]["results"])
+    goalscorers = data_structs["model"]["goalscorers"]
+    nl =  lt.newList("ARRAY_LIST")
+    first = time.strptime(date_i, "%Y-%m-%d")
+    second = time.strptime(date_f, "%Y-%m-%d")
+    for i in lt.iterator(results):
+        date_actual = time.strptime(i["date"], "%Y-%m-%d")
+        if date_actual > first and date_actual < second:
+            if i["tournament"] == torneo:
+                lt.addLast(nl,i)
 
+
+def paises(data_structs):
+    teams = lt.newList("ARRAY_LIST")
+    for i in lt.iterator(data_structs):
+         if lt.isPresent(teams,i["team"]) == 0:
+             lt.addLast(teams,i["team"])
+    merg.sort(teams,cmp_teams)
+    return teams
+
+def scorer_names(data_structs):
+    scorer_name = lt.newList("ARRAY_LIST")
+    for i in lt.iterator(data_structs):
+         if lt.isPresent(scorer_name,i["scorer"]) == 0:
+             lt.addLast(scorer_name,i["scorer"])
+    return scorer_name
+
+def top_scorer(data_structs): 
+    scorer = lt.newList("ARRAY_LIST")
+    scorers = data_structs["model"]["goalscorers"]
+    pais= paises(scorers)
+    scorer_name = scorer_names(scorers)
+    for i in lt.iterator(pais):
+        x = {}
+        x[i] = lt.newList("ARRAY_LIST")
+        for j in lt.iterator(scorers):
+            if i == j["team"]:
+                lt.addLast(x[i],j)
+        lt.addLast(scorer,x[i])
+        for i in 
+         
+    return  scorer
 
 def req_7(data_structs):
     """
@@ -250,6 +327,9 @@ def cmp_partidos_by_fecha_y_pais (data_1,  data_2):
     else:
         pos =  False
     return pos
+
+
+
 def compare_dates_inter(data_1,  data_2):
     x = (data_1["date"])
     y = (data_2["date"])
@@ -257,8 +337,14 @@ def compare_dates_inter(data_1,  data_2):
     second = time.strptime(y, "%Y-%m-%d")
     return first < second
 
-    
-    
+
+
+def cmp_teams(data_1,  data_2):
+    return data_1 < data_2
+
+
+
+
 def sort_criteria(data_1, data_2):
     """sortCriteria criterio de ordenamiento para las funciones de ordenamiento
 

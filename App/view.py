@@ -148,12 +148,18 @@ def print_req_2(control , nombre, n):
     
 
 
-def print_req_3(control):
+def print_req_3(control,date_i, date_f , team):
     """
         Función que imprime la solución del Requerimiento 3 en consola
     """
     # TODO: Imprimir el resultado del requerimiento 3
-    pass
+    dtos, home_matchs, away_matchs, total = controller.req_3(control,date_i, date_f , team)
+    print(tabulate(dtos["elements"], headers = "keys", tablefmt='grid'))
+    print(home_matchs)
+    print(away_matchs)
+    print(total)
+
+
 
 
 def print_req_4(control):
@@ -164,12 +170,15 @@ def print_req_4(control):
     pass
 
 
-def print_req_5(control):
+def print_req_5(control, date_i, date_f , nombre):
     """
         Función que imprime la solución del Requerimiento 5 en consola
     """
     # TODO: Imprimir el resultado del requerimiento 5
-    pass
+    dtos, penalty, own_goal =  controller.req_5(control, date_i, date_f , nombre)
+    print(tabulate(dtos["elements"], headers = "keys", tablefmt='grid'))
+    print(penalty)
+    print(own_goal)
 
 
 def print_req_6(control):
@@ -195,11 +204,7 @@ def print_req_8(control):
     # TODO: Imprimir el resultado del requerimiento 8
     pass
 
-def print_req_9(control,tipo):
 
-    dts , tiempo =  controller.tipo_sort(control,tipo)
-    print(tabulate(dts["elements"], headers = "keys", tablefmt='grid'))
-    print(tiempo)
 
     
 
@@ -221,21 +226,23 @@ if __name__ == "__main__":
             print("".center(130,"-"))
             results , goalscorers , shootouts = load_data(control)
             print(print_carga(control))
-            
+            x= controller.paises(control)
+            print(tabulate(x["elements"] , headers = "keys" , tablefmt='grid'))
+
         elif int(inputs) == 2:
-            print_req_1(control,"Solomon Islands","home",15)
+            print_req_1(control,"Italy","home",15)
 
         elif int(inputs) == 3:
-            print_req_2(control, "Son Heung-min" , 7)
+            print_req_2(control, "Rodolph Austin" , 7)
 
         elif int(inputs) == 4:
-            print_req_3(control)
+            print_req_3(control,"1939-01-01","1980-12-31","Germany")
 
         elif int(inputs) == 5:
             print_req_4(control)
 
         elif int(inputs) == 6:
-            print_req_5(control)
+            print_req_5(control, "1999-03-25", "2021-11-23", "Ali Daei")
 
         elif int(inputs) == 7:
             print_req_6(control)
@@ -246,9 +253,6 @@ if __name__ == "__main__":
         elif int(inputs) == 9:
             print_req_8(control)
 
-        elif int(inputs) == 10:
-            tipo =  input("Define el tipo de lista: \n 1- para Slection \n 2- para Insertion  \n 3-Para shell")
-            print_req_9(control,tipo)
 
         elif int(inputs) == 0:
             working = False
