@@ -219,8 +219,6 @@ def req_4(data_structs, date_i, date_f, tournament):
     second = time.strptime(date_f, "%Y-%m-%d")
     nl= lt.newList("ARRAY_LIST")
     matches = 0
-    countries = 0
-    cities = 0
     shootouts = 0
     ct = []
     cou = []
