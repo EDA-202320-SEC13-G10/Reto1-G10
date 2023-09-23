@@ -208,12 +208,43 @@ def req_3(data_structs, date_i, date_f , team):
     
 
 
-def req_4(data_structs):
+def req_4(data_structs, date_i, date_f, tournament):
     """
     Función que soluciona el requerimiento 4
     """
     # TODO: Realizar el requerimiento 5
-    pass
+    results = data_structs["model"]["results"]
+    shootouts = data_structs["model"]["shootouts"]
+    first = time.strptime(date_i, "%Y-%m-%d")
+    second = time.strptime(date_f, "%Y-%m-%d")
+    nl= lt.newList("ARRAY_LIST")
+    matches = 0
+    countries = 0
+    cities = 0
+    shootouts = 0
+    ct = []
+    cou = []
+    for i in lt.iterator(results):
+        date_actual = time.strptime(i["date"], "%Y-%m-%d")
+        if date_actual > first and date_actual < second:
+            if i["tournament"].lower() == tournament.lower():
+                matches += 1
+                lt.addLast(nl,i)
+                if not(i["city"].lower()) in ct:
+                    ct.append(i["city"].lower())
+                if not(i["country"].lower()) in cou:
+                    cou.append(i["country"].lower())
+    cities = lt.size(ct)
+    countries = lt.size(cou)
+    for i in lt.iterator(shootouts):
+        date_actual = time.strptime(i["date"], "%Y-%m-%d")
+        if date_actual > first and date_actual < second:
+            if i["tournament"].lower() == tournament.lower():
+                shootouts += 1
+    return nl, matches, countries, cities, shootouts
+                
+                
+    
 
 def req_5(data_structs, date_i, date_f , nombre):
     """
@@ -285,7 +316,7 @@ def top_scorer(data_structs):
                 lt.addLast(x[i],j)
         lt.addLast(scorer,x[i])
         for i in 
-         
+           
     return  scorer
 
 def req_7(data_structs):

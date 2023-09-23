@@ -162,12 +162,17 @@ def print_req_3(control,date_i, date_f , team):
 
 
 
-def print_req_4(control):
+def print_req_4(control, date_i, date_f, tournament):
     """
         Función que imprime la solución del Requerimiento 4 en consola
     """
     # TODO: Imprimir el resultado del requerimiento 41
-    pass
+    dtos, matches, countries, cities, shootouts = controller.req_4(control, date_i, date_f, tournament)
+    print(tabulate(dtos["elements"], headers = "keys", tablefmt="grid"))
+    print(matches)
+    print(countries)
+    print(cities)
+    print(shootouts)
 
 
 def print_req_5(control, date_i, date_f , nombre):
@@ -239,7 +244,7 @@ if __name__ == "__main__":
             print_req_3(control,"1939-01-01","1980-12-31","Germany")
 
         elif int(inputs) == 5:
-            print_req_4(control)
+            print_req_4(control, "1955-06-01", "2022-06-30", "Copa América")
 
         elif int(inputs) == 6:
             print_req_5(control, "1999-03-25", "2021-11-23", "Ali Daei")

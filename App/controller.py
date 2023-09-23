@@ -158,12 +158,13 @@ def req_3(control,date_i, date_f , team):
     return dtos, home_matchs, away_matchs, total
 
 
-def req_4(control):
+def req_4(control, date_i, date_f, tournament):
     """
     Retorna el resultado del requerimiento 4
     """
     # TODO: Modificar el requerimiento 4
-    pass
+    nl, matches, countries, cities, shootouts = model.req_4(control, date_i, date_f, tournament)
+    return nl, matches, countries, cities, shootouts
 
 
 def req_5(control, date_i, date_f , nombre):
