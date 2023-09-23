@@ -26,7 +26,7 @@ import controller
 from DISClib.ADT import list as lt
 from DISClib.ADT import stack as st
 from DISClib.ADT import queue as qu
-from tabulate import tabulate
+import tabulate as tb
 
 assert cf
 import traceback
@@ -112,28 +112,28 @@ def print_carga(control):
     print("".center(130,"-"))
     print("         Total match results: " +str(rt))
     print("Results struct has more than 6 records...")
-    print(tabulate(l1["elements"] , headers = "keys" , tablefmt='grid'))
+    print(tb.tabulate(l1["elements"] , headers = "keys" , tablefmt='grid'))
     
     print("".center(130,"-"))
     print("GOAL SCORERS".center(130,"-"))
     print("".center(130,"-"))
     print("         Total goal scorers: " +str(gl))
     print("Results struct has more than 6 records...")
-    print(tabulate(l2["elements"], headers = "keys" , tablefmt='grid'))
+    print(tb.tabulate(l2["elements"], headers = "keys" , tablefmt='grid'))
     
     print("".center(130,"-"))
     print("SHOOTOUTS".center(130,"-"))
     print("".center(130,"-"))
     print("         Total shootouts: " +str(sh))
     print("Results struct has more than 6 records...")
-    print(tabulate(l3["elements"], headers = "keys" , tablefmt='grid'))
+    print(tb.tabulate(l3["elements"], headers = "keys" , tablefmt='grid'))
 
 
 
 
 def print_req_1(control,pais,tipolocal,n):
     l1,l2=controller.req_1(control,pais,tipolocal,n)
-    print(tabulate(l1["elements"], headers = "keys" , tablefmt='grid'))
+    print(tb.tabulate(l1["elements"], headers = "keys" , tablefmt='grid'))
     print(l2)
     
     
@@ -143,7 +143,7 @@ def print_req_2(control , nombre, n):
         en consola
     """
     l1,l2=controller.req_2(control,nombre,n)
-    print(tabulate(l1["elements"], headers = "keys", tablefmt='grid'))
+    print(tb.tabulate(l1["elements"], headers = "keys", tablefmt='grid'))
     print(l2)
     
 
@@ -154,7 +154,7 @@ def print_req_3(control,date_i, date_f , team):
     """
     # TODO: Imprimir el resultado del requerimiento 3
     dtos, home_matchs, away_matchs, total = controller.req_3(control,date_i, date_f , team)
-    print(tabulate(dtos["elements"], headers = "keys", tablefmt='grid'))
+    print(tb.tabulate(dtos["elements"], headers = "keys", tablefmt='grid'))
     print(home_matchs)
     print(away_matchs)
     print(total)
@@ -168,7 +168,7 @@ def print_req_4(control, date_i, date_f, tournament):
     """
     # TODO: Imprimir el resultado del requerimiento 41
     dtos, matches, countries, cities, shootouts = controller.req_4(control, date_i, date_f, tournament)
-    print(tabulate(dtos["elements"], headers = "keys", tablefmt="grid"))
+    print(tb.tabulate(dtos["elements"], headers = "keys", tablefmt="grid"))
     print(matches)
     print(countries)
     print(cities)
@@ -181,7 +181,7 @@ def print_req_5(control, date_i, date_f , nombre):
     """
     # TODO: Imprimir el resultado del requerimiento 5
     dtos, penalty, own_goal =  controller.req_5(control, date_i, date_f , nombre)
-    print(tabulate(dtos["elements"], headers = "keys", tablefmt='grid'))
+    print(tb.tabulate(dtos["elements"], headers = "keys", tablefmt='grid'))
     print(penalty)
     print(own_goal)
 
@@ -230,9 +230,7 @@ if __name__ == "__main__":
             print("Cargando información de los archivos ....".center(130))
             print("".center(130,"-"))
             results , goalscorers , shootouts = load_data(control)
-            print(print_carga(control))
-            x= controller.paises(control)
-            print(tabulate(x["elements"] , headers = "keys" , tablefmt='grid'))
+            print_carga(control)
 
         elif int(inputs) == 2:
             print_req_1(control,"Italy","home",15)

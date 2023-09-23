@@ -232,8 +232,8 @@ def req_4(data_structs, date_i, date_f, tournament):
                     ct.append(i["city"].lower())
                 if not(i["country"].lower()) in cou:
                     cou.append(i["country"].lower())
-    cities = lt.size(ct)
-    countries = lt.size(cou)
+    cities = len(ct)
+    countries = len(cou)
     ne= lt.newList("ARRAY_LIST")
     for i in lt.iterator(nl):
         pen = "Unknown"
@@ -243,15 +243,15 @@ def req_4(data_structs, date_i, date_f, tournament):
                 if i["home_team"] == j["home_team"]:
                     pen = j["winner"]
                     shootout += 1
-        x["date"] == i["date"]
-        x["tournament"] == i["tournament"]
-        x["country"] == i["country"]
-        x["city"] == i["city"]
-        x["home_team"] == i["home_team"]
-        x["away_team"] == i["away_team"]
-        x["home_score"] == i["home_score"]
-        x["away_score"] == i["away_score"]
-        x["winner"] == pen
+        x["date"] = i["date"]
+        x["tournament"] = i["tournament"]
+        x["country"] = i["country"]
+        x["city"] = i["city"]
+        x["home_team"] = i["home_team"]
+        x["away_team"] = i["away_team"]
+        x["home_score"] = i["home_score"]
+        x["away_score"] = i["away_score"]
+        x["winner"] = pen
         lt.addLast(ne, x)
         
     return ne, matches, countries, cities, shootout
@@ -328,11 +328,10 @@ def top_scorer(data_structs):
             if i == j["team"]:
                 lt.addLast(x[i],j)
         lt.addLast(scorer,x[i])
-        for i in 
            
     return  scorer
 
-def req_7(data_structs):
+def req_7(data_structs, tamanio,  date_i, date_f):
     """
     Función que soluciona el requerimiento 7
     """
