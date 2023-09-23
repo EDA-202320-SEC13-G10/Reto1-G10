@@ -219,7 +219,7 @@ def req_4(data_structs, date_i, date_f, tournament):
     second = time.strptime(date_f, "%Y-%m-%d")
     nl= lt.newList("ARRAY_LIST")
     matches = 0
-    shootouts = 0
+    shootout = 0
     ct = []
     cou = []
     for i in lt.iterator(results):
@@ -234,12 +234,27 @@ def req_4(data_structs, date_i, date_f, tournament):
                     cou.append(i["country"].lower())
     cities = lt.size(ct)
     countries = lt.size(cou)
-    for i in lt.iterator(shootouts):
-        date_actual = time.strptime(i["date"], "%Y-%m-%d")
-        if date_actual > first and date_actual < second:
-            if i["tournament"].lower() == tournament.lower():
-                shootouts += 1
-    return nl, matches, countries, cities, shootouts
+    ne= lt.newList("ARRAY_LIST")
+    for i in lt.iterator(nl):
+        pen = "Unknown"
+        x = {}
+        for j in lt.iterator(shootouts):
+            if i["date"] == j["date"]:
+                if i["home_team"] == j["home_team"]:
+                    pen = j["winner"]
+                    shootout += 1
+        x["date"] == i["date"]
+        x["tournament"] == i["tournament"]
+        x["country"] == i["country"]
+        x["city"] == i["city"]
+        x["home_team"] == i["home_team"]
+        x["away_team"] == i["away_team"]
+        x["home_score"] == i["home_score"]
+        x["away_score"] == i["away_score"]
+        x["winner"] == pen
+        lt.addLast(ne, x)
+        
+    return ne, matches, countries, cities, shootout
                 
                 
     
