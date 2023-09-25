@@ -123,10 +123,6 @@ def req_1(control, pais, tipolocal, n):
     return  rq1model, size
 
     
-def paises(control):
-    goalscorers = control["model"]["goalscorers"]
-    paises = model.top_scorer(control)
-    return paises
 
 
 def req_2(control, nombre, n):
@@ -174,12 +170,12 @@ def req_5(control, date_i, date_f , nombre):
     nl, penalty, own_goal  = model.req_5(control, date_i, date_f , nombre)
     return nl, penalty, own_goal
 
-def req_6(control):
+def req_6(control,date_i, date_f, torneo):
     """
     Retorna el resultado del requerimiento 6
     """
     # TODO: Modificar el requerimiento 6
-    pass
+    return model.req_6(control,date_i, date_f, torneo)
 
 
 def req_7(control):
@@ -187,7 +183,7 @@ def req_7(control):
     Retorna el resultado del requerimiento 7
     """
     # TODO: Modificar el requerimiento 7
-    pass
+    return model.teams_country(control)
 
 
 def req_8(control):

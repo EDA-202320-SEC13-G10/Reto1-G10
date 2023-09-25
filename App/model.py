@@ -239,7 +239,7 @@ def req_5(data_structs, date_i, date_f , nombre):
     return nl, penalty, own_goal                     
 
 
-def req_6(data_structs , tamanio,  date_i, date_f, torneo):
+def req_6(data_structs ,   date_i, date_f, torneo):
 
     """
     Función que soluciona el requerimiento 6
@@ -255,7 +255,22 @@ def req_6(data_structs , tamanio,  date_i, date_f, torneo):
         if date_actual > first and date_actual < second:
             if i["tournament"] == torneo:
                 lt.addLast(nl,i)
+    goalscorers = sort_Scorers_by_Resulys(data_structs,nl)
+    scorer_a = scorer_avg(goalscorers)
+    o = top_scorer_avg(scorer_a)
+    
+    u= teams_country(nl,goalscorers,scorer_a)
+    quk.sort(u,cmp_best_teams)
+    return u
 
+def sort_Scorers_by_Resulys(data_structs , r):
+    goalscorers = data_structs["model"]["goalscorers"]
+    nl =  lt.newList("ARRAY_LIST")
+    for i in lt.iterator(r):
+        for j in lt.iterator(goalscorers):
+            if i["date"] == j["date"] and i["home_team"] == j["home_team"] and i["away_team"] == j["away_team"]:
+                        lt.addLast(nl,j)
+    return nl
 
 def paises(data_structs):
     teams = lt.newList("ARRAY_LIST")
@@ -272,22 +287,105 @@ def scorer_names(data_structs):
              lt.addLast(scorer_name,i["scorer"])
     return scorer_name
 
-def top_scorer(data_structs): 
-    scorer = lt.newList("ARRAY_LIST")
-    scorers = data_structs["model"]["goalscorers"]
-    pais= paises(scorers)
-    scorer_name = scorer_names(scorers)
+def scorer_avg(data_structs):
+    scorer_name = lt.newList("ARRAY_LIST")
+    scorer_namew = scorer_names(data_structs)
+    for j in lt.iterator(scorer_namew):
+        x = {}
+        x["name"] = j
+        x["Match"] = 0
+        x["minutes"] = 0
+        x["goals"] = 0
+        x["avg_time"] = 0
+
+        for z in lt.iterator(data_structs):
+            if j == z["scorer"]:
+                x["team"] = z["team"]  
+                x["Match"] = int(x["Match"]) + 1
+                if z["minute"] != "":
+                    x["minutes"]   += float(z["minute"])
+                if  z["own_goal"] == "False":
+                    x["goals"] = int(x["goals"]) + 1
+                    x["avg_time"] = round(float(x["minutes"]) / float(x["Match"]),1)                   
+        lt.addLast(scorer_name,x)
+    return scorer_name
+def top_scorer_avg(data_structs):
+    top = lt.newList("ARRAY_LIST")
+    pais = paises(data_structs)
+    for i in lt.iterator(pais):
+        x= {}
+        for j in lt.iterator(data_structs):       
+            if i == j["team"]:
+                if x == {}:
+                    x = j
+                else:
+                    if x["goals"] < j["goals"]:
+                        x = j
+                    elif x["goals"] == j["goals"]:
+                            if x["avg_time"] > j["avg_time"]: 
+                                  x = j
+        lt.addLast(top,x)
+    return top
+
+def teams_country(results, goalscorers, s):
+    nl = lt.newList("ARRAY_LIST")
+    pais = paises(goalscorers)
+    top = top_scorer_avg(s)
     for i in lt.iterator(pais):
         x = {}
-        x[i] = lt.newList("ARRAY_LIST")
-        for j in lt.iterator(scorers):
-            if i == j["team"]:
-                lt.addLast(x[i],j)
-        lt.addLast(scorer,x[i])
-        for i in 
-         
-    return  scorer
-
+        x["team"] = i
+        x["total_points"] = 0
+        x["goal_difference"] = 0
+        x["penalty_points"] = 0
+        x["matches"] = 0
+        x["own_goal_points"] = 0
+        x["wins"] = 0
+        x["draws"] = 0
+        x["losses"] = 0
+        x["goals_for"] = 0
+        x["goals_against"] = 0
+        x["top_scorer"] = {}
+        for n in lt.iterator(top):
+            if n["team"] == i:
+                x["top_scorer"]["scorer"] = n["name"] 
+                x["top_scorer"]["goals"] = n["goals"] 
+                x["top_scorer"]["matches"] = n["Match"] 
+                x["top_scorer"]["avg_time [min]"] = n["avg_time"] 
+        for k in lt.iterator(goalscorers):
+            if k["team"] == i:
+                if k["penalty"] == "True":
+                    x["penalty_points"] +=1
+                if k["own_goal"] == "True":
+                    x["own_goal_points"] +=1
+        for j in lt.iterator(results):
+            if j["home_team"] == i or j["away_team"] == i:
+                x["matches"] += 1 
+                if j["home_team"] == i:
+                    if j["home_score"] > j["away_score"]:
+                        x["wins"] += 1
+                        x["total_points"] += 3
+                    elif j["home_score"] == j["away_score"]:
+                        x["draws"] += 1
+                        x["total_points"] += 1
+                    else:
+                        x["losses"] += 1
+                    x["goal_difference"] += (int(j["home_score"]) - int(j["away_score"]))
+                    x["goals_for"] += int(j["home_score"])
+                    x["goals_against"] += int(j["away_score"])
+                else:
+                    if j["away_score"] > j["home_score"]:
+                        x["wins"] += 1
+                        x["total_points"] += 3
+                    elif j["away_score"] == j["home_score"]:
+                        x["draws"] += 1
+                        x["total_points"] += 1
+                    else:
+                        x["losses"] += 1
+                    x["goal_difference"] += (int(j["away_score"]) - int(j["home_score"]))
+                    x["goals_for"] += int(j["away_score"])
+                    x["goals_against"] += int(j["home_score"])
+        lt.addLast(nl,x)
+    return(nl)
 def req_7(data_structs):
     """
     Función que soluciona el requerimiento 7
@@ -313,6 +411,14 @@ def compare(data_1, data_2):
     """
     #TODO: Crear función comparadora de la lista
     pass
+
+def cmp_best_teams(data_1,  data_2):
+    if data_1["total_points"] > data_2["total_points"]:
+        return True
+    if data_1["total_points"] == data_2["total_points"]:
+        if data_1["goal_difference"] > data_2["goal_difference"]:
+            return True
+    
 
 # Funciones de ordenamiento
 def cmp_partidos_by_fecha_y_pais (data_1,  data_2):

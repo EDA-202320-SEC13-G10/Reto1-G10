@@ -181,20 +181,23 @@ def print_req_5(control, date_i, date_f , nombre):
     print(own_goal)
 
 
-def print_req_6(control):
+def print_req_6(control,date_i, date_f, torneo):
     """
         Función que imprime la solución del Requerimiento 6 en consola
     """
     # TODO: Imprimir el resultado del requerimiento 6
-    pass
+    z =  controller.req_6(control,date_i, date_f, torneo)
+    print(tabulate(z["elements"], headers = "keys", tablefmt='grid'))
 
 
 def print_req_7(control):
     """
         Función que imprime la solución del Requerimiento 7 en consola
     """
+        
+
     # TODO: Imprimir el resultado del requerimiento 7
-    pass
+    print(tabulate(controller.req_7(control)["elements"], headers = "keys", tablefmt='grid'))
 
 
 def print_req_8(control):
@@ -226,8 +229,7 @@ if __name__ == "__main__":
             print("".center(130,"-"))
             results , goalscorers , shootouts = load_data(control)
             print(print_carga(control))
-            x= controller.paises(control)
-            print(tabulate(x["elements"] , headers = "keys" , tablefmt='grid'))
+            
 
         elif int(inputs) == 2:
             print_req_1(control,"Italy","home",15)
@@ -245,7 +247,7 @@ if __name__ == "__main__":
             print_req_5(control, "1999-03-25", "2021-11-23", "Ali Daei")
 
         elif int(inputs) == 7:
-            print_req_6(control)
+            print_req_6(control,"2002-03-25", "2021-11-23", "UEFA Euro qualification")
 
         elif int(inputs) == 8:
             print_req_7(control)
