@@ -183,13 +183,13 @@ def req_6(control):
     pass
 
 
-def req_7(control):
+def req_7(control, tamanio,  date_i, date_f):
     """
     Retorna el resultado del requerimiento 7
     """
     # TODO: Modificar el requerimiento 7
-    pass
-
+    nl, players, matches, goals, penalties, own_goals = model.req_7(control, tamanio,  date_i, date_f)
+    return nl, players, matches, goals, penalties, own_goals
 
 def req_8(control):
     """

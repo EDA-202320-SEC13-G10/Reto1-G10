@@ -194,12 +194,18 @@ def print_req_6(control):
     pass
 
 
-def print_req_7(control):
+def print_req_7(control, tamanio,  date_i, date_f):
     """
         Función que imprime la solución del Requerimiento 7 en consola
     """
     # TODO: Imprimir el resultado del requerimiento 7
-    pass
+    dtos, players, matches, goals, penalties, own_goals = controller.req_7(control, tamanio,  date_i, date_f)
+    print(tb.tabulate(dtos["elements"], headers = "keys", tablefmt='grid'))
+    print(players)
+    print(matches)
+    print(goals)
+    print(penalties)
+    print(own_goals)
 
 
 def print_req_8(control):
@@ -251,7 +257,7 @@ if __name__ == "__main__":
             print_req_6(control)
 
         elif int(inputs) == 8:
-            print_req_7(control)
+            print_req_7(control, 17, "2002-01-25", "2021-11-23")
 
         elif int(inputs) == 9:
             print_req_8(control)

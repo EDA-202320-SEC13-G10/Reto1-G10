@@ -336,8 +336,89 @@ def req_7(data_structs, tamanio,  date_i, date_f):
     Función que soluciona el requerimiento 7
     """
     # TODO: Realizar el requerimiento 7
-    pass
-
+    results = data_structs["model"]["results"]
+    scorers = data_structs["model"]["goalscorers"]
+    first = time.strptime(date_i, "%Y-%m-%d")
+    second = time.strptime(date_f, "%Y-%m-%d")
+    x = {}
+    penalties = 0
+    own_goals = 0
+    goals = 0
+    mat = []
+    h = 0 # Para indicar goles
+    for i in lt.iterator(scorers):
+        date_actual = time.strptime(i["date"], "%Y-%m-%d")
+        if date_actual > first and date_actual < second:
+            for j in lt.iterator(results):
+                fecha = time.strptime(j["date"], "%Y-%m-%d")
+                if fecha == date_actual:
+                    if i["home_team"].lower() == j["home_team"].lower():
+                        # Cantidad de partidos y goles (revisión)
+                        if not([j["date"], j["home_team"]]) in mat:
+                            mat.append([j["date"], j["home_team"]])
+                            goals += (int(j["home_score"]) + int(j["away_score"]))
+                        # Estadisticas goleadores 
+                        if not(i["scorer"]) in x.keys():
+                            x[i["scorer"]] = [0,0,0,0,[],[],0,0,0,[]]
+                        # Goles, autogoles, penaltys y puntos
+                        x[i["scorer"]][1] += 1
+                        if i["own_goal"] == "True":
+                            x[i["scorer"]][3] += 1
+                            x[i["scorer"]][0] -= 1
+                            own_goals += 1
+                        elif i["penalty"] == "True":
+                            x[i["scorer"]][2] += 1
+                            x[i["scorer"]][0] += 2
+                            penalties += 1
+                        else:
+                            x[i["scorer"]][0] += 1
+                        # Promedio de minutos
+                        x[i["scorer"]][4].append(float(i["minute"]))
+                        # Torneos
+                        if not(j["tournament"].lower()) in x[i["scorer"]][5]:
+                            x[i["scorer"]][5].append(j["tournament"].lower())
+                        # Goles anotados en victoria, derrota o empate
+                        if i["team"].lower() == j["home_team"].lower() and j["home_score"] > j["away_score"]:
+                            x[i["scorer"]][6] += 1
+                        elif i["team"].lower() == j["home_team"].lower() and j["home_score"] == j["away_score"]:
+                            x[i["scorer"]][8] += 1
+                        elif i["team"].lower() == j["home_team"].lower() and j["home_score"] < j["away_score"]:
+                            x[i["scorer"]][7] += 1
+                        elif i["team"].lower() == j["away_team"].lower() and j["home_score"] > j["away_score"]:
+                            x[i["scorer"]][7] += 1
+                        elif i["team"].lower() == j["away_team"].lower() and j["home_score"] == j["away_score"]:
+                            x[i["scorer"]][8] += 1
+                        elif i["team"].lower() == j["away_team"].lower() and j["home_score"] < j["away_score"]:
+                            x[i["scorer"]][6] += 1
+                        # Ultimo gol
+                        x[i["scorer"]][9] = {"date": j["date"], "tournament": j["tournament"], "home_team": j["home_team"], "away_team": j["away_team"], "home_score": j["home_score"], "away_score": j["away_score"], "minute": i["minute"], "penalty": i["penalty"], "own_goal": i["own_goal"]}
+    nl = lt.newList("ARRAY_LIST")
+    sco_names = list(x.keys())
+    sco_values = list(x.values())
+    players = 0
+    matches = len(mat)
+    # Organizar
+    for sc in range(len(x)):
+        gs = {}
+        gs["scorer"] = sco_names[sc]
+        gs["total_points"] = sco_values[sc][0]
+        gs["total_goals"] = sco_values[sc][1]
+        gs["penalty_goals"] = sco_values[sc][2]
+        gs["own_goals"] = sco_values[sc][3]
+        gs["avg_time [min]"] = sum(sco_values[sc][4])/len(sco_values[sc][4])
+        gs["total_tournaments"] = len(sco_values[sc][5])
+        gs["scored_in_wins"] = sco_values[sc][6]
+        gs["scored_in_losses"] = sco_values[sc][7]
+        gs["scored_in_draws"] = sco_values[sc][8]
+        ne = lt.newList("ARRAY_LIST")
+        gs["last_goal"] = lt.addLast(ne,sco_values[sc][9])
+        players += 1
+        lt.addLast(nl,gs)
+    # Sort
+    # Sublist con N
+    nl = lt.subList(nl,1,tamanio)
+    return nl, players, matches, goals, penalties, own_goals
+    
 
 def req_8(data_structs):
     """
