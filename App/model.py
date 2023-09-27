@@ -580,7 +580,7 @@ def req_8(data_structs, date_i,date_f, team_1, team_2):
 
 
 
-    return scorer_p_a_team1 ,scorer_p_a_team1
+    return scorer_p_a_team1 ,scorer_p_a_team2
 
 def scorer_names_team(data_structs,team):
     scorer_name = lt.newList("ARRAY_LIST")
