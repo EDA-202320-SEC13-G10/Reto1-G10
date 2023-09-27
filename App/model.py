@@ -543,6 +543,7 @@ def req_7(data_structs, tamanio,  date_i, date_f):
         players += 1
         lt.addLast(nl,gs)
     # Sort
+    merg.sort(nl,cmp_scorers)
     # Sublist con N
     nl = lt.subList(nl,1,tamanio)
     return nl, players, matches, goals, penalties, own_goals
@@ -761,7 +762,31 @@ def compare_dates_inter(data_1,  data_2):
 def cmp_teams(data_1,  data_2):
     return data_1 < data_2
 
-
+def cmp_scorers(data_1, data_2):
+    if data_1["total_points"] > data_2["total_points"]:
+        return True
+    elif data_1["total_points"] == data_2["total_points"]:
+        if data_1["total_goals"] > data_2["total_goals"]:
+            return True
+        elif data_1["total_goals"] < data_2["total_goals"]:
+            return False
+        else:
+            if data_1["penalty_goals"] > data_2["penalty_goals"]:
+                return True
+            elif data_1["penalty_goals"] < data_2["penalty_goals"]:
+                return False
+            else:
+                if data_1["own_goals"] < data_2["own_goals"]:
+                    return True
+                elif data_1["own_goals"] > data_2["own_goals"]:
+                    return False
+                else:
+                    if data_1["avg_time [min]"] < data_2["avg_time [min]"] or data_1["avg_time [min]"] == data_2["avg_time [min]"]:
+                        return True
+                    else:
+                        return False
+    else:
+        return False
 
 
 def sort_criteria(data_1, data_2):

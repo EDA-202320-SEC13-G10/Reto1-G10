@@ -225,6 +225,10 @@ def req_7(control, tamanio,  date_i, date_f):
     # TODO: Modificar el requerimiento 7
     nl, players, matches, goals, penalties, own_goals = model.req_7(control, tamanio,  date_i, date_f)
     size = model.data_size(nl)
+    if size < 6:
+        nl =  nl
+    else:
+        nl =  model.first_last3(nl)
     return nl, players, matches, goals, penalties, own_goals, size
 
 def req_8(control):
