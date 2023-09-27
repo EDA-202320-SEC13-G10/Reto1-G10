@@ -60,7 +60,7 @@ def load_data(control):
 
 
 def loadRasults(dtos):
-    filename = "football/results-utf8-10pct.csv"
+    filename = "football/results-utf8-20pct.csv"
     file = cf.data_dir + filename
     input_file = csv.DictReader(open(file , encoding='utf-8'))
     for data in input_file:
@@ -70,7 +70,7 @@ def loadRasults(dtos):
 
 
 def loadGoalscorers(dtos):
-    filename = "football/goalscorers-utf8-10pct.csv"
+    filename = "football/goalscorers-utf8-20pct.csv"
     file = cf.data_dir + filename
     input_file = csv.DictReader(open(file , encoding='utf-8'))
     for data in input_file:
@@ -79,7 +79,7 @@ def loadGoalscorers(dtos):
 
 
 def loadShootouts(dtos):
-    filename = "football/shootouts-utf8-10pct.csv"
+    filename = "football/shootouts-utf8-20pct.csv"
     file = cf.data_dir + filename
     input_file = csv.DictReader(open(file , encoding='utf-8'))
     for data in input_file:
