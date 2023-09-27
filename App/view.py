@@ -298,7 +298,7 @@ def print_req_7(control):
     print(("Official tournaments total penalties: "+ str(penalties)).center(100))
     print(("Official tournaments total own goals: "+ str(own_goals)).center(100))
     
-    if size_i > 6:
+    if size > 6:
         print("Resultrs struct has more than 6 records...")
     else:
         print("Resultrs struct has less than 6 records...")
