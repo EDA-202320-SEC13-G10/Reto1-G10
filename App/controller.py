@@ -114,19 +114,16 @@ def req_1(control, pais, tipolocal, n):
     result =  control["model"]["results"]
     rq1model = model.req_1(result , pais , tipolocal)
     size= model.data_size(rq1model)
+    size_i = size
     if size > n:
         size = n
         rq1model =  model.sublista(rq1model,1,size)
     
     if size > 6:
         rq1model =  model.first_last3(rq1model)
-    return  rq1model, size
+    return  rq1model, size ,size_i
 
     
-def paises(control):
-    goalscorers = control["model"]["goalscorers"]
-    paises = model.top_scorer(control)
-    return paises
 
 
 def req_2(control, nombre, n):
@@ -136,6 +133,7 @@ def req_2(control, nombre, n):
     goalscorers = control["model"]["goalscorers"]
     rq2model = model.req_2(goalscorers, nombre)
     size = model.data_size(rq2model)
+    size_i = size
     if size > n:
         size = n
     rq2model =  model.sublista(rq2model,1,size)
@@ -144,7 +142,7 @@ def req_2(control, nombre, n):
     else:
         rq2model =  model.first_last3(rq2model)
 
-    return rq2model, size
+    return rq2model, size, size_i
 
 
 def req_3(control,date_i, date_f , team):
@@ -154,8 +152,13 @@ def req_3(control,date_i, date_f , team):
     dtos, home_matchs, away_matchs =  model.req_3(control,date_i, date_f , team)
     # TODO: Modificar el requerimiento 3
     total = home_matchs + away_matchs
+    size = model.data_size(dtos)
     
-    return dtos, home_matchs, away_matchs, total
+    if size < 6:
+        dtos =  dtos
+    else:
+        dtos =  model.first_last3(dtos)
+    return dtos, home_matchs, away_matchs, total,size
 
 
 def req_4(control, date_i, date_f, tournament):
@@ -175,12 +178,12 @@ def req_5(control, date_i, date_f , nombre):
     nl, penalty, own_goal  = model.req_5(control, date_i, date_f , nombre)
     return nl, penalty, own_goal
 
-def req_6(control):
+def req_6(control,date_i, date_f, torneo):
     """
     Retorna el resultado del requerimiento 6
     """
     # TODO: Modificar el requerimiento 6
-    pass
+    return model.req_6(control,date_i, date_f, torneo)
 
 
 def req_7(control, tamanio,  date_i, date_f):
@@ -196,8 +199,8 @@ def req_8(control):
     Retorna el resultado del requerimiento 8
     """
     # TODO: Modificar el requerimiento 8
-    pass
-
+    z,x = model.req_8(control,"1952-03-25","2021-11-23","Argentina","Chile")
+    return z , x
 
 # Funciones para medir tiempos de ejecucion
 

@@ -131,35 +131,67 @@ def print_carga(control):
 
 
 
-def print_req_1(control,pais,tipolocal,n):
-    l1,l2=controller.req_1(control,pais,tipolocal,n)
-    print(tb.tabulate(l1["elements"], headers = "keys" , tablefmt='grid'))
-    print(l2)
+def print_req_1(control):
+    print("Req No. 1 Input".center(130,"="))
+
+    n =  int(input("Number of matches: "))
+    team_name =  input("Team name: ")
+    tipolocal =  input("Team condition: ")
+
+    print("Req No. 1 Results".center(130,"="))
+    l1,l2, l3=controller.req_1(control,team_name,tipolocal,n)
+    print(("Total matches found "+ str(l3)).center(100))
+    print(("Selecting "+ str(l2) + " matches...").center(100))
+    if l3 > 6:
+        print("Resultrs struct has more than 6 records...")
+    else:
+        print("Resultrs struct has less than 6 records...")
+    print(tabulate(l1["elements"], headers = "keys" , tablefmt='grid'))
     
     
-def print_req_2(control , nombre, n):
+def print_req_2(control ):
     """
         Función que imprime la solución del Requerimiento 2 
         en consola
     """
-    l1,l2=controller.req_2(control,nombre,n)
-    print(tb.tabulate(l1["elements"], headers = "keys", tablefmt='grid'))
-    print(l2)
+    print("Req No. 2 Input".center(130,"="))
+
+    n =  int(input("Number of scorer: "))
+    nombre =  input("Player name: ")
+    l1,l2, l3=controller.req_2(control,nombre,n)
+    print("Req No. 2 Results".center(130,"="))
+    print(("Total matches found "+ str(l3)).center(100))
+    print(("Selecting "+ str(l2) + " matches...").center(100))
+    if l3 > 6:
+        print("Resultrs struct has more than 6 records...")
+    else:
+        print("Resultrs struct has less than 6 records...")
+    print(tabulate(l1["elements"], headers = "keys", tablefmt='grid'))
+
     
 
 
-def print_req_3(control,date_i, date_f , team):
+def print_req_3(control):
     """
         Función que imprime la solución del Requerimiento 3 en consola
     """
     # TODO: Imprimir el resultado del requerimiento 3
-    dtos, home_matchs, away_matchs, total = controller.req_3(control,date_i, date_f , team)
-    print(tb.tabulate(dtos["elements"], headers = "keys", tablefmt='grid'))
-    print(home_matchs)
-    print(away_matchs)
-    print(total)
+    print("Req No. 3 Input".center(130,"="))
 
+    team_name =  input("Team name: ")
+    star_date =  input("Start date: ")
+    end_date =  input("End date: ")
+    dtos, home_matchs, away_matchs, total, size = controller.req_3(control,star_date, end_date , team_name)
+    print("Req No. 3 Results".center(130,"="))
+    print((team_name + " Total games "+ str(total)).center(100))
+    print((team_name + " Total home games "+ str(home_matchs)).center(100))
+    print((team_name + " Total away games "+ str(away_matchs)).center(100))
 
+    if size > 6:
+        print("Resultrs struct has more than 6 records...")
+    else:
+        print("Resultrs struct has less than 6 records...")
+    print(tabulate(dtos["elements"], headers = "keys" , tablefmt='grid'))
 
 
 def print_req_4(control, date_i, date_f, tournament):
@@ -181,23 +213,26 @@ def print_req_5(control, date_i, date_f , nombre):
     """
     # TODO: Imprimir el resultado del requerimiento 5
     dtos, penalty, own_goal =  controller.req_5(control, date_i, date_f , nombre)
-    print(tb.tabulate(dtos["elements"], headers = "keys", tablefmt='grid'))
+    print(tabulate(dtos["elements"], headers = "keys", tablefmt='grid'))
     print(penalty)
     print(own_goal)
 
 
-def print_req_6(control):
+def print_req_6(control,date_i, date_f, torneo):
     """
         Función que imprime la solución del Requerimiento 6 en consola
     """
     # TODO: Imprimir el resultado del requerimiento 6
-    pass
+    z =  controller.req_6(control,date_i, date_f, torneo)
+    print(tabulate(z["elements"], headers = "keys", tablefmt='grid'))
 
 
 def print_req_7(control, tamanio,  date_i, date_f):
     """
         Función que imprime la solución del Requerimiento 7 en consola
     """
+        
+
     # TODO: Imprimir el resultado del requerimiento 7
     dtos, players, matches, goals, penalties, own_goals = controller.req_7(control, tamanio,  date_i, date_f)
     print(tb.tabulate(dtos["elements"], headers = "keys", tablefmt='grid'))
@@ -213,7 +248,9 @@ def print_req_8(control):
         Función que imprime la solución del Requerimiento 8 en consola
     """
     # TODO: Imprimir el resultado del requerimiento 8
-    pass
+    x , y = controller.req_8(control)
+    print(tabulate(x["elements"], headers = "keys", tablefmt='grid'))
+
 
 
 
@@ -239,13 +276,13 @@ if __name__ == "__main__":
             print_carga(control)
 
         elif int(inputs) == 2:
-            print_req_1(control,"Italy","home",15)
+            print_req_1(control)
 
         elif int(inputs) == 3:
-            print_req_2(control, "Rodolph Austin" , 7)
+            print_req_2(control)
 
         elif int(inputs) == 4:
-            print_req_3(control,"1939-01-01","1980-12-31","Germany")
+            print_req_3(control)
 
         elif int(inputs) == 5:
             print_req_4(control, "1955-06-01", "2022-06-30", "Copa América")
@@ -254,7 +291,7 @@ if __name__ == "__main__":
             print_req_5(control, "1999-03-25", "2021-11-23", "Ali Daei")
 
         elif int(inputs) == 7:
-            print_req_6(control)
+            print_req_6(control,"2002-03-25", "2021-11-23", "UEFA Euro qualification")
 
         elif int(inputs) == 8:
             print_req_7(control, 17, "2002-01-25", "2021-11-23")
