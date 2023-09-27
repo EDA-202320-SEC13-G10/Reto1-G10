@@ -112,7 +112,10 @@ def req_1(control, pais, tipolocal, n):
     """
     # TODO: Modificar el requerimiento 1
     result =  control["model"]["results"]
+    start=get_time()
     rq1model = model.req_1(result , pais , tipolocal)
+    end=get_time()
+    tiempo=delta_time(start,end)
     size= model.data_size(rq1model)
     if size > n:
         size = n
@@ -120,7 +123,7 @@ def req_1(control, pais, tipolocal, n):
     
     if size > 6:
         rq1model =  model.first_last3(rq1model)
-    return  rq1model, size
+    return  rq1model, size, tiempo
 
     
 def paises(control):
@@ -134,7 +137,10 @@ def req_2(control, nombre, n):
     Retorna el resultado del requerimiento 2
     """
     goalscorers = control["model"]["goalscorers"]
+    start=get_time()
     rq2model = model.req_2(goalscorers, nombre)
+    end=get_time()
+    tiempo=delta_time(start,end)
     size = model.data_size(rq2model)
     if size > n:
         size = n
@@ -144,18 +150,21 @@ def req_2(control, nombre, n):
     else:
         rq2model =  model.first_last3(rq2model)
 
-    return rq2model, size
+    return rq2model, size, tiempo
 
 
 def req_3(control,date_i, date_f , team):
     """
     Retorna el resultado del requerimiento 3
     """
+    start=get_time()
     dtos, home_matchs, away_matchs =  model.req_3(control,date_i, date_f , team)
+    end=get_time()
+    tiempo=delta_time(start,end)
     # TODO: Modificar el requerimiento 3
     total = home_matchs + away_matchs
     
-    return dtos, home_matchs, away_matchs, total
+    return dtos, home_matchs, away_matchs, total, tiempo
 
 
 def req_4(control, date_i, date_f, tournament):
@@ -163,8 +172,11 @@ def req_4(control, date_i, date_f, tournament):
     Retorna el resultado del requerimiento 4
     """
     # TODO: Modificar el requerimiento 4
+    start=get_time()
     nl, matches, countries, cities, shootouts = model.req_4(control, date_i, date_f, tournament)
-    return nl, matches, countries, cities, shootouts
+    end=get_time()
+    tiempo=delta_time(start,end)
+    return nl, matches, countries, cities, shootouts, tiempo
 
 
 def req_5(control, date_i, date_f , nombre):
@@ -172,8 +184,11 @@ def req_5(control, date_i, date_f , nombre):
     Retorna el resultado del requerimiento 5
     """
     # TODO: Modificar el requerimiento 5
+    start=get_time()
     nl, penalty, own_goal  = model.req_5(control, date_i, date_f , nombre)
-    return nl, penalty, own_goal
+    end=get_time()
+    tiempo=delta_time(start,end)
+    return nl, penalty, own_goal, tiempo
 
 def req_6(control):
     """
@@ -188,8 +203,11 @@ def req_7(control, tamanio,  date_i, date_f):
     Retorna el resultado del requerimiento 7
     """
     # TODO: Modificar el requerimiento 7
+    start=get_time()
     nl, players, matches, goals, penalties, own_goals = model.req_7(control, tamanio,  date_i, date_f)
-    return nl, players, matches, goals, penalties, own_goals
+    end=get_time()
+    tiempo=delta_time(start,end)
+    return nl, players, matches, goals, penalties, own_goals, tiempo
 
 def req_8(control):
     """

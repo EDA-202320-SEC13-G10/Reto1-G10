@@ -189,7 +189,7 @@ def req_3(data_structs, date_i, date_f , team):
         x = {}
         for j in lt.iterator(goalscorers):
             if i["date"] == j["date"]:
-                if ["home_team"] == j["home_team"]:
+                if i["home_team"] == j["home_team"]:
                     x["date"] = j["date"]
                     x["home_team"] = j["home_team"]
                     x["away_team"] = j["away_team"]
@@ -213,7 +213,7 @@ def req_4(data_structs, date_i, date_f, tournament):
     """
     Función que soluciona el requerimiento 4
     """
-    # TODO: Realizar el requerimiento 5
+    # TODO: Realizar el requerimiento 4
     results = data_structs["model"]["results"]
     shootouts = data_structs["model"]["shootouts"]
     first = time.strptime(date_i, "%Y-%m-%d")
@@ -264,7 +264,7 @@ def req_5(data_structs, date_i, date_f , nombre):
     """
     Función que soluciona el requerimiento 5
     """
-    # TODO: Realizar el requerimiento 4
+    # TODO: Realizar el requerimiento 5
     results = data_structs["model"]["results"]
     goalscorers = data_structs["model"]["goalscorers"]
     first = time.strptime(date_i, "%Y-%m-%d")
