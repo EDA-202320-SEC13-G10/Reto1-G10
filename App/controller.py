@@ -117,19 +117,16 @@ def req_1(control, pais, tipolocal, n):
     end=get_time()
     tiempo=delta_time(start,end)
     size= model.data_size(rq1model)
+    size_i = size
     if size > n:
         size = n
         rq1model =  model.sublista(rq1model,1,size)
     
     if size > 6:
         rq1model =  model.first_last3(rq1model)
-    return  rq1model, size, tiempo
+    return  rq1model, size ,size_i
 
     
-def paises(control):
-    goalscorers = control["model"]["goalscorers"]
-    paises = model.top_scorer(control)
-    return paises
 
 
 def req_2(control, nombre, n):
@@ -142,6 +139,7 @@ def req_2(control, nombre, n):
     end=get_time()
     tiempo=delta_time(start,end)
     size = model.data_size(rq2model)
+    size_i = size
     if size > n:
         size = n
     rq2model =  model.sublista(rq2model,1,size)
@@ -150,21 +148,26 @@ def req_2(control, nombre, n):
     else:
         rq2model =  model.first_last3(rq2model)
 
-    return rq2model, size, tiempo
+    return rq2model, size, size_i
 
 
 def req_3(control,date_i, date_f , team):
     """
     Retorna el resultado del requerimiento 3
     """
-    start=get_time()
+    start = get_time()
     dtos, home_matchs, away_matchs =  model.req_3(control,date_i, date_f , team)
-    end=get_time()
-    tiempo=delta_time(start,end)
+    end = get_time()
+    delta_time(start,end)
     # TODO: Modificar el requerimiento 3
     total = home_matchs + away_matchs
+    size = model.data_size(dtos)
     
-    return dtos, home_matchs, away_matchs, total, tiempo
+    if size < 6:
+        dtos =  dtos
+    else:
+        dtos =  model.first_last3(dtos)
+    return dtos, home_matchs, away_matchs, total,size
 
 
 def req_4(control, date_i, date_f, tournament):
@@ -174,9 +177,9 @@ def req_4(control, date_i, date_f, tournament):
     # TODO: Modificar el requerimiento 4
     start=get_time()
     nl, matches, countries, cities, shootouts = model.req_4(control, date_i, date_f, tournament)
-    end=get_time()
-    tiempo=delta_time(start,end)
-    return nl, matches, countries, cities, shootouts, tiempo
+    size = model.data_size(nl)
+    
+    return nl, matches, countries, cities, shootouts, size
 
 
 def req_5(control, date_i, date_f , nombre):
@@ -184,18 +187,27 @@ def req_5(control, date_i, date_f , nombre):
     Retorna el resultado del requerimiento 5
     """
     # TODO: Modificar el requerimiento 5
-    start=get_time()
-    nl, penalty, own_goal  = model.req_5(control, date_i, date_f , nombre)
-    end=get_time()
-    tiempo=delta_time(start,end)
-    return nl, penalty, own_goal, tiempo
+    nl, penalty, own_goal,goals  = model.req_5(control, date_i, date_f , nombre)
+    size = model.data_size(nl)
 
-def req_6(control):
+    return nl, penalty, own_goal, goals, size
+
+def req_6(control,date_i, date_f, torneo,n):
     """
     Retorna el resultado del requerimiento 6
     """
     # TODO: Modificar el requerimiento 6
-    pass
+    u ,n_teams, n_partidos,n_paises,n_ciudades = model.req_6(control,date_i, date_f, torneo)
+    size = model.data_size(u)
+    size_i = size
+    if size > n:
+        size = n
+        u =  model.sublista(u,1,size)
+    if size < 6:
+        u =  u
+    else:
+        u =  model.first_last3(u)
+    return  u ,n_teams, n_partidos,n_paises,n_ciudades, size_i
 
 
 def req_7(control, tamanio,  date_i, date_f):
@@ -214,8 +226,8 @@ def req_8(control):
     Retorna el resultado del requerimiento 8
     """
     # TODO: Modificar el requerimiento 8
-    pass
-
+    z,x = model.req_8(control,"1952-03-25","2021-11-23","Argentina","Chile")
+    return z , x
 
 # Funciones para medir tiempos de ejecucion
 

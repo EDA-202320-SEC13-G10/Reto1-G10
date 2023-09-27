@@ -185,29 +185,32 @@ def req_3(data_structs, date_i, date_f , team):
                             away_matchs += 1
                         lt.addLast(nl,i)
     ne= lt.newList("ARRAY_LIST")
-    for i in lt.iterator(nl):
+    c = sort_Scorers_by_Resulys(data_structs,nl)
+    for i in lt.iterator(c):
         x = {}
-        for j in lt.iterator(goalscorers):
-            if i["date"] == j["date"]:
-                if i["home_team"] == j["home_team"]:
+        for j in lt.iterator(nl):
+            if i["date"] == j["date"] and i["home_team"] == j["home_team"] and  i["away_team"] == j["away_team"]:
                     x["date"] = j["date"]
                     x["home_team"] = j["home_team"]
                     x["away_team"] = j["away_team"]
-                    x["home_score"] = i["home_score"]
-                    x["away_score"] = i["away_score"]
-                    x["country"] = i["country"]
-                    x["city"] = i["city"]
-                    x["tournament"] = i["tournament"]
-                    x["penalty"] = j["penalty"]
-                    x["own_goal"] = j["own_goal"]
+                    x["home_score"] = j["home_score"]
+                    x["away_score"] = j["away_score"]
+                    x["country"] = j["country"]
+                    x["city"] = j["city"]
+                    x["tournament"] = j["tournament"]
+                    if i["penalty"] == "":
+                        x["penalty"] = "unknown"
+                    else:
+                        x["penalty"] = i["penalty"]
+                    x["own_goal"] = i["own_goal"]
                     lt.addLast(ne,x)
     # TODO: Realizar el requerimiento 3
     
-    return ne, home_matchs, away_matchs
+    return nl, home_matchs, away_matchs
 
 
     
-
+            
 
 def req_4(data_structs, date_i, date_f, tournament):
     """
@@ -265,26 +268,32 @@ def req_5(data_structs, date_i, date_f , nombre):
     Función que soluciona el requerimiento 5
     """
     # TODO: Realizar el requerimiento 5
+    
     results = data_structs["model"]["results"]
     goalscorers = data_structs["model"]["goalscorers"]
     first = time.strptime(date_i, "%Y-%m-%d")
     second = time.strptime(date_f, "%Y-%m-%d")
     nl= lt.newList("ARRAY_LIST")
+    goals= 0
     penalty = 0
     own_goal = 0
     for i in lt.iterator(goalscorers):
         date_actual = time.strptime(i["date"], "%Y-%m-%d")
         if date_actual > first and date_actual < second:
                     if i["scorer"].lower() == nombre.lower():
+                        goals +=1
                         if i["penalty"] == "True":
                             penalty += 1
                         if i["own_goal"] == "True":
                             own_goal += 1
+                            goals -=1
+                        
                         lt.addLast(nl,i)
-    return nl, penalty, own_goal                     
+
+    return nl, penalty, own_goal, goals                    
 
 
-def req_6(data_structs , tamanio,  date_i, date_f, torneo):
+def req_6(data_structs ,   date_i, date_f, torneo):
 
     """
     Función que soluciona el requerimiento 6
@@ -293,14 +302,44 @@ def req_6(data_structs , tamanio,  date_i, date_f, torneo):
     results =sorter_date_country(data_structs["model"]["results"])
     goalscorers = data_structs["model"]["goalscorers"]
     nl =  lt.newList("ARRAY_LIST")
+    pais = lt.newList("ARRAY_LIST")
+    teams = lt.newList("ARRAY_LIST")
+    ciudades = lt.newList("ARRAY_LIST")
     first = time.strptime(date_i, "%Y-%m-%d")
     second = time.strptime(date_f, "%Y-%m-%d")
     for i in lt.iterator(results):
+        
         date_actual = time.strptime(i["date"], "%Y-%m-%d")
         if date_actual > first and date_actual < second:
             if i["tournament"] == torneo:
+                if lt.isPresent(ciudades,i["city"]) == 0:
+                    lt.addLast(ciudades,i["city"])
+                if lt.isPresent(pais,i["country"]) == 0:
+                    lt.addLast(pais,i["country"])
+                if lt.isPresent(teams,i["home_team"]) == 0:
+                    lt.addLast(teams,i["home_team"])
+                if lt.isPresent(teams,i["away_team"]) == 0:
+                    lt.addLast(teams,i["away_team"])
                 lt.addLast(nl,i)
+    n_partidos = data_size(nl)
+    n_teams = data_size(teams)
+    n_paises = data_size(pais)
+    n_ciudades = data_size(ciudades)
+    
+    goalscorers = sort_Scorers_by_Resulys(data_structs,nl)
+    scorer_a = scorer_avg(goalscorers) 
+    u= teams_country(nl,goalscorers,scorer_a)
+    merg.sort(u,cmp_best_teams)
+    return u ,n_teams, n_partidos,n_paises,n_ciudades
 
+def sort_Scorers_by_Resulys(data_structs , r):
+    goalscorers = data_structs["model"]["goalscorers"]
+    nl =  lt.newList("ARRAY_LIST")
+    for i in lt.iterator(r):
+        for j in lt.iterator(goalscorers):
+            if i["date"] == j["date"] and i["home_team"] == j["home_team"] and i["away_team"] == j["away_team"]:
+                        lt.addLast(nl,j)
+    return nl
 
 def paises(data_structs):
     teams = lt.newList("ARRAY_LIST")
@@ -317,20 +356,107 @@ def scorer_names(data_structs):
              lt.addLast(scorer_name,i["scorer"])
     return scorer_name
 
-def top_scorer(data_structs): 
-    scorer = lt.newList("ARRAY_LIST")
-    scorers = data_structs["model"]["goalscorers"]
-    pais= paises(scorers)
-    scorer_name = scorer_names(scorers)
+def scorer_avg(data_structs):
+    scorer_name = lt.newList("ARRAY_LIST")
+    scorer_namew = scorer_names(data_structs)
+    for j in lt.iterator(scorer_namew):
+        x = {}
+        x["name"] = j
+        x["Match"] = 0
+        x["minutes"] = 0
+        x["goals"] = 0
+        x["avg_time"] = 0
+
+        for z in lt.iterator(data_structs):
+            if j == z["scorer"]:
+                x["team"] = z["team"]  
+                x["Match"] = int(x["Match"]) + 1
+                if z["minute"] != "":
+                    x["minutes"]   += float(z["minute"])
+                if  z["own_goal"] == "False":
+                    x["goals"] = int(x["goals"]) + 1
+                    x["avg_time"] = round(float(x["minutes"]) / float(x["Match"]),1)                   
+        lt.addLast(scorer_name,x)
+    return scorer_name
+
+
+def top_scorer_avg(data_structs):
+    top = lt.newList("ARRAY_LIST")
+    pais = paises(data_structs)
+    for i in lt.iterator(pais):
+        x= {}
+        for j in lt.iterator(data_structs):       
+            if i == j["team"]:
+                if x == {}:
+                    x = j
+                else:
+                    if x["goals"] < j["goals"]:
+                        x = j
+                    elif x["goals"] == j["goals"]:
+                            if x["avg_time"] > j["avg_time"]: 
+                                  x = j
+        lt.addLast(top,x)
+    return top
+
+def teams_country(results, goalscorers, s):
+    nl = lt.newList("ARRAY_LIST")
+    pais = paises(goalscorers)
+    top = top_scorer_avg(s)
     for i in lt.iterator(pais):
         x = {}
-        x[i] = lt.newList("ARRAY_LIST")
-        for j in lt.iterator(scorers):
-            if i == j["team"]:
-                lt.addLast(x[i],j)
-        lt.addLast(scorer,x[i])
-           
-    return  scorer
+        x["team"] = i
+        x["total_points"] = 0
+        x["goal_difference"] = 0
+        x["penalty_points"] = 0
+        x["matches"] = 0
+        x["own_goal_points"] = 0
+        x["wins"] = 0
+        x["draws"] = 0
+        x["losses"] = 0
+        x["goals_for"] = 0
+        x["goals_against"] = 0
+        x["top_scorer"] = {}
+        for n in lt.iterator(top):
+            if n["team"] == i:
+                x["top_scorer"]["scorer"] = n["name"] 
+                x["top_scorer"]["goals"] = n["goals"] 
+                x["top_scorer"]["matches"] = n["Match"] 
+                x["top_scorer"]["avg_time [min]"] = n["avg_time"] 
+        for k in lt.iterator(goalscorers):
+            if k["team"] == i:
+                if k["penalty"] == "True":
+                    x["penalty_points"] +=1
+                if k["own_goal"] == "True":
+                    x["own_goal_points"] +=1
+        for j in lt.iterator(results):
+            if j["home_team"] == i or j["away_team"] == i:
+                x["matches"] += 1 
+                if j["home_team"] == i:
+                    if j["home_score"] > j["away_score"]:
+                        x["wins"] += 1
+                        x["total_points"] += 3
+                    elif j["home_score"] == j["away_score"]:
+                        x["draws"] += 1
+                        x["total_points"] += 1
+                    else:
+                        x["losses"] += 1
+                    x["goal_difference"] += (int(j["home_score"]) - int(j["away_score"]))
+                    x["goals_for"] += int(j["home_score"])
+                    x["goals_against"] += int(j["away_score"])
+                else:
+                    if j["away_score"] > j["home_score"]:
+                        x["wins"] += 1
+                        x["total_points"] += 3
+                    elif j["away_score"] == j["home_score"]:
+                        x["draws"] += 1
+                        x["total_points"] += 1
+                    else:
+                        x["losses"] += 1
+                    x["goal_difference"] += (int(j["away_score"]) - int(j["home_score"]))
+                    x["goals_for"] += int(j["away_score"])
+                    x["goals_against"] += int(j["home_score"])
+        lt.addLast(nl,x)
+    return(nl)
 
 def req_7(data_structs, tamanio,  date_i, date_f):
     """
@@ -412,8 +538,7 @@ def req_7(data_structs, tamanio,  date_i, date_f):
         gs["scored_in_losses"] = sco_values[sc][7]
         gs["scored_in_draws"] = sco_values[sc][8]
         ne = lt.newList("ARRAY_LIST")
-        lt.addLast(ne,sco_values[sc][9])
-        gs["last_goal"] = tb.tabulate(ne["elements"], headers = "keys", tablefmt='grid')
+        
         players += 1
         lt.addLast(nl,gs)
     # Sort
@@ -422,15 +547,174 @@ def req_7(data_structs, tamanio,  date_i, date_f):
     return nl, players, matches, goals, penalties, own_goals
     
 
-def req_8(data_structs):
+def req_8(data_structs, date_i,date_f, team_1, team_2):
     """
     Función que soluciona el requerimiento 8
     """
     # TODO: Realizar el requerimiento 8
-    pass
+    result =  data_structs["model"]["results"]
+    nl1 =  lt.newList("ARRAY_LIST")
+    nl2 =  lt.newList("ARRAY_LIST")
+    first = time.strptime(date_i, "%Y-%m-%d")
+    second = time.strptime(date_f, "%Y-%m-%d")
+    merg.sort(result,compare_dates_inter)
+    for i in lt.iterator(result):
+        date_actual = time.strptime(i["date"], "%Y-%m-%d")
+        if date_actual > first and date_actual < second:
+            if i["home_team"] == team_1 or i["away_team"] == team_1:
+                 if i["tournament"] != "Friendly":
+                    lt.addLast(nl1,i)
+            if i["home_team"] == team_2 or i["away_team"] == team_2:
+                 if i["tournament"] != "Friendly":
+                    lt.addLast(nl2,i)
+    stas1 =stas_country(nl1,team_1)
+    stas2 =stas_country(nl2,team_2)
+
+    sort_team1= sort_Scorers_by_Resulys(data_structs,nl1)
+    sort_team2= sort_Scorers_by_Resulys(data_structs,nl2)
+
+    scorer_p_a_team1 = scorer_avg_per_anio(sort_team1,team_1)
+    scorer_p_a_team2 = scorer_avg_per_anio(sort_team2,team_2)
 
 
+
+
+    return scorer_p_a_team1 ,scorer_p_a_team1
+
+def scorer_names_team(data_structs,team):
+    scorer_name = lt.newList("ARRAY_LIST")
+    for i in lt.iterator(data_structs):
+         if i["team"] == team:
+            if lt.isPresent(scorer_name,i["scorer"]) == 0:
+                lt.addLast(scorer_name,i["scorer"])
+    return scorer_name
+
+
+
+def scorer_avg_per_anio(data_structs,team):
+    scorer_name = lt.newList("ARRAY_LIST")
+    scorer_namew = scorer_names_team(data_structs,team)
+    for j in lt.iterator(scorer_namew):
+        x = {}
+        x["date"] = ""
+        x["name"] = j
+        x["Match"] = 0
+        x["minutes"] = 0
+        x["goals"] = 0
+        x["avg_time"] = 0
+
+        for z in lt.iterator(data_structs):
+            if team ==z["team"]:
+                if j == z["scorer"]:
+                    x["date"] = z["date"]
+                    x["team"] = z["team"]  
+                    x["Match"] = int(x["Match"]) + 1
+                    if z["minute"] != "":
+                        x["minutes"]   += float(z["minute"])
+                    if  z["own_goal"] == "False":
+                        x["goals"] = int(x["goals"]) + 1
+                        x["avg_time"] = round(float(x["minutes"]) / float(x["Match"]),1)                   
+        lt.addLast(scorer_name,x)
+    return scorer_name
+
+
+def top_scorer_avg_per_anios(data_structs):
+    top = lt.newList("ARRAY_LIST")
+    anio = anios(data_structs)
+    for i in lt.iterator(anio):
+        x= {}
+        for j in lt.iterator(data_structs):
+            y = j["date"]
+            y = y[0:4]       
+            if i == y:
+                if x == {}:
+
+                    x = j
+                else:
+                    if x["goals"] < j["goals"]:
+                        x = j
+                    elif x["goals"] == j["goals"]:
+                            if x["avg_time"] > j["avg_time"]: 
+                                  x = j
+        lt.addLast(top,x)
+    return top
+
+def anios(data_structs):
+    menor = 0
+    mayor= 3000
+    
+    nl =  lt.newList("ARRAY_LIST")
+    for i in lt.iterator(data_structs):
+        y = i["date"]
+        y = y[0:4]
+        if lt.isPresent(nl,y) == 0:
+            lt.addLast(nl,y)
+            if menor > int(y):
+                menor = int(y)
+            if mayor < int(y):       
+                menor = int(y)
+        years = mayor - menor    
+    return nl
 # Funciones utilizadas para comparar elementos dentro de una lista
+
+def stas_country(data_structs,country):
+    nl =  lt.newList("ARRAY_LIST")
+    anio = anios(data_structs)
+    Total_matches = 0
+    Total_home_matches = 0
+    Total_away_matches = 0
+    oldest_match = " "
+    for j in lt.iterator(anio):
+        x = {}
+        x["year"] = j
+        x["matches"] = 0
+        x["total_points"] = 0
+        x["goal_difference"] = 0
+        x["penalties"] = 0
+        x["own_goals"] = 0
+        x["wins"] = 0
+        x["drwas"] = 0
+        x["losses"] = 0
+        x["goals_for"] = 0
+        x["goals_against"] = 0
+        x["top_scorer"] = 0
+        for i in lt.iterator(data_structs):
+            y = i["date"]
+            y = y[0:4]
+            if j == y:
+                if i["home_team"] == country:
+                    Total_home_matches +=1 
+                    x["matches"] +=1
+                    x["goals_for"] += int(i["home_score"])
+                    x["goals_against"] += int(i["away_score"])
+                    x["goal_difference"] = x["goals_for"] - x["goals_against"]
+                    if i["home_score"] > i["away_score"]:
+                        x["total_points"] += 3
+                        x["wins"] += 1
+                    if i["home_score"] == i["away_score"]:
+                        x["total_points"] += 1
+                        x["drwas"] += 1
+                    else:
+                         x["losses"] += 1
+                if i["away_team"] == country:
+                    Total_away_matches +=1 
+                    x["matches"] +=1
+                    x["goals_for"] += int(i["away_score"])
+                    x["goals_against"] += int(i["home_score"])
+                    x["goal_difference"] = x["goals_for"] - x["goals_against"]
+                    if i["away_score"] > i["home_score"]:
+                        x["total_points"] += 3
+                        x["wins"] += 1
+                    if i["away_score"] == i["home_score"]:
+                        x["total_points"] += 1
+                        x["drwas"] += 1
+                    else:
+                         x["losses"] += 1
+        
+        lt.addLast(nl,x)
+    Total_matches = Total_away_matches+Total_home_matches   
+    return nl
+
 
 
 def compare(data_1, data_2):
@@ -439,6 +723,14 @@ def compare(data_1, data_2):
     """
     #TODO: Crear función comparadora de la lista
     pass
+
+def cmp_best_teams(data_1,  data_2):
+    if data_1["total_points"] > data_2["total_points"]:
+        return True
+    if data_1["total_points"] == data_2["total_points"]:
+        if data_1["goal_difference"] > data_2["goal_difference"]:
+            return True
+    
 
 # Funciones de ordenamiento
 def cmp_partidos_by_fecha_y_pais (data_1,  data_2):
