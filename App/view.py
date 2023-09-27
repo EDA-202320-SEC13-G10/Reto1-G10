@@ -199,19 +199,28 @@ def print_req_6(control):
     pass
 
 
-def print_req_7(control, tamanio,  date_i, date_f):
+def print_req_7(control):
     """
         Función que imprime la solución del Requerimiento 7 en consola
     """
     # TODO: Imprimir el resultado del requerimiento 7
+    print("Req No. 7 Input".center(130,"="))
+    tamanio =  int(input("Top N elements: "))
+    date_i =  input("Start date: ")
+    date_f =  input("End date: ")
     dtos, players, matches, goals, penalties, own_goals, tiempo = controller.req_7(control, tamanio,  date_i, date_f)
-    print(tb.tabulate(dtos["elements"], headers = "keys", tablefmt='grid'))
-    print(players)
-    print(matches)
-    print(goals)
-    print(penalties)
-    print(own_goals)
-    print(tiempo)
+    print("Req No. 7 Results".center(130,"="))
+    print(("Official tournaments total players: "+ str(players)).center(100))
+    print(("Official tournaments total matches: "+ str(matches)).center(100))
+    print(("Official tournaments total goals: "+ str(goals)).center(100))
+    print(("Official tournaments total penalties: "+ str(penalties)).center(100))
+    print(("Official tournaments total own goals: "+ str(own_goals)).center(100))
+    
+    if size > 6:
+        print("Resultrs struct has more than 6 records...")
+    else:
+        print("Resultrs struct has less than 6 records...")
+    print(tabulate(dtos["elements"], headers = "keys" , tablefmt='grid'))
 
 
 def print_req_8(control):
@@ -263,7 +272,7 @@ if __name__ == "__main__":
             print_req_6(control)
 
         elif int(inputs) == 8:
-            print_req_7(control, 17, "2002-01-25", "2021-11-23")
+            print_req_7(control)
 
         elif int(inputs) == 9:
             print_req_8(control)
