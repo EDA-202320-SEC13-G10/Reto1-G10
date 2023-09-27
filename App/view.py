@@ -134,13 +134,9 @@ def print_carga(control):
 def print_req_1(control):
     print("Req No. 1 Input".center(130,"="))
 
-    n =  15
-    team_name =  'Italy'
-    tipolocal =  'home'
-
-    #n =  int(input("Number of matches: "))
-    #team_name =  input("Team name: ")
-    #tipolocal =  input("Team condition: ")
+    n =  int(input("Number of matches: "))
+    team_name =  input("Team name: ")
+    tipolocal =  input("Team condition: ")
 
     print("Req No. 1 Results".center(130,"="))
     l1,l2, l3, tiempo=controller.req_1(control,team_name,tipolocal,n)
@@ -161,11 +157,10 @@ def print_req_2(control ):
         en consola
     """
     print("Req No. 2 Input".center(130,"="))
-    n =  7
-    nombre =  'Michael Ballack'
+    
 
-    #n =  int(input("Number of scorer: "))
-    #nombre =  input("Player name: ")
+    n =  int(input("Number of scorer: "))
+    nombre =  input("Player name: ")
     l1,l2, l3, tiempo=controller.req_2(control,nombre,n)
     print("Req No. 2 Results".center(130,"="))
     print(("Total matches found "+ str(l3)).center(100))
@@ -186,12 +181,10 @@ def print_req_3(control):
     """
     # TODO: Imprimir el resultado del requerimiento 3
     print("Req No. 3 Input".center(130,"="))
-    team_name = 'Germany'
-    star_date = '1939-01-01'
-    end_date = '1980-12-31'
-    #team_name =  input("Team name: ")
-    #star_date =  input("Start date: ")
-    #end_date =  input("End date: ")
+
+    team_name =  input("Team name: ")
+    star_date =  input("Start date: ")
+    end_date =  input("End date: ")
     dtos, home_matchs, away_matchs, total, size, tiempo = controller.req_3(control,star_date, end_date , team_name)
     print("Req No. 3 Results".center(130,"="))
     print((team_name + " Total games "+ str(total)).center(100))
@@ -213,13 +206,11 @@ def print_req_4(control):
     # TODO: Imprimir el resultado del requerimiento 41
     
     print("Req No. 4 Input".center(130,"="))
-    tournamnet_name =  'Copa America'
-    star_date =  '1955-06-01'
-    end_date =  '2022-06-30'
 
-    #tournamnet_name =  input("Tournamnet name: ")
-    #star_date =  input("Start date: ")
-    #end_date =  input("End date: ")
+
+    tournamnet_name =  input("Tournamnet name: ")
+    star_date =  input("Start date: ")
+    end_date =  input("End date: ")
     dtos, matches, countries, cities, shootouts, size, tiempo = controller.req_4(control, star_date, end_date, tournamnet_name)
     print("Req No. 3 Results".center(130,"="))
     print((tournamnet_name + " Total matches "+ str(matches)).center(100))
@@ -242,13 +233,11 @@ def print_req_5(control):
     """
     # TODO: Imprimir el resultado del requerimiento 5
     print("Req No. 5 Input".center(130,"="))
-    player_name =  'Ali Daei'
-    star_date =  '1999-03-25'
-    end_date =  '2021-11-23'
 
-    #player_name =  input("Player name: ")
-    #star_date =  input("Start date: ")
-    #end_date =  input("End date: ")
+
+    player_name =  input("Player name: ")
+    star_date =  input("Start date: ")
+    end_date =  input("End date: ")
     dtos, penalty, own_goal,goals, size, tiempo =  controller.req_5(control, star_date, end_date , player_name)
     print("Req No. 3 Results".center(130,"="))
     print((player_name + " Total goals "+ str(goals)).center(100))
@@ -272,15 +261,12 @@ def print_req_6(control):
 
 
     print("Req No. 6 Input".center(130,"="))
-    tournament_name =  'UEFA Euro qualification'
-    n = 11
-    star_date =  '2002-03-25'
-    end_date =  '2021-11-03'
 
-    #tournament_name =  input("Tournament name: ")
-    #n = int(input("Top N: "))
-    #star_date =  input("Start date: ")
-    #end_date =  input("End date: ")
+
+    tournament_name =  input("Tournament name: ")
+    n = int(input("Top N: "))
+    star_date =  input("Start date: ")
+    end_date =  input("End date: ")
     u ,n_teams, n_partidos,n_paises,n_ciudades, size_i, tiempo =  controller.req_6(control,star_date, end_date, tournament_name,n)
 
     print("Req No. 6 Results".center(130,"="))
@@ -305,12 +291,10 @@ def print_req_7(control):
 
     # TODO: Imprimir el resultado del requerimiento 7
     print("Req No. 7 Input".center(130,"="))
-    tamanio =  17
-    date_i =  '2002-03-25'
-    date_f =  '2021-11-03'
-    #tamanio =  int(input("Top N: "))
-    #date_i =  input("Start date: ")
-    #date_f =  input("End date: ")
+
+    tamanio =  int(input("Top N: "))
+    date_i =  input("Start date: ")
+    date_f =  input("End date: ")
     dtos, players, matches, goals, penalties, own_goals, size, tiempo = controller.req_7(control, tamanio,  date_i, date_f)
     print("Req No. 7 Results".center(130,"="))
     print(("Official tournaments total players: "+ str(players)).center(100))
