@@ -132,9 +132,10 @@ def print_carga(control):
 
 
 def print_req_1(control,pais,tipolocal,n):
-    l1,l2=controller.req_1(control,pais,tipolocal,n)
+    l1,l2, tiempo=controller.req_1(control,pais,tipolocal,n)
     print(tb.tabulate(l1["elements"], headers = "keys" , tablefmt='grid'))
     print(l2)
+    print(tiempo)
     
     
 def print_req_2(control , nombre, n):
@@ -142,9 +143,10 @@ def print_req_2(control , nombre, n):
         Función que imprime la solución del Requerimiento 2 
         en consola
     """
-    l1,l2=controller.req_2(control,nombre,n)
+    l1,l2, tiempo=controller.req_2(control,nombre,n)
     print(tb.tabulate(l1["elements"], headers = "keys", tablefmt='grid'))
     print(l2)
+    print(tiempo)
     
 
 
@@ -168,12 +170,13 @@ def print_req_4(control, date_i, date_f, tournament):
         Función que imprime la solución del Requerimiento 4 en consola
     """
     # TODO: Imprimir el resultado del requerimiento 41
-    dtos, matches, countries, cities, shootouts = controller.req_4(control, date_i, date_f, tournament)
+    dtos, matches, countries, cities, shootouts, tiempo = controller.req_4(control, date_i, date_f, tournament)
     print(tb.tabulate(dtos["elements"], headers = "keys", tablefmt="grid"))
     print(matches)
     print(countries)
     print(cities)
     print(shootouts)
+    print(tiempo)
 
 
 def print_req_5(control, date_i, date_f , nombre):
@@ -181,10 +184,11 @@ def print_req_5(control, date_i, date_f , nombre):
         Función que imprime la solución del Requerimiento 5 en consola
     """
     # TODO: Imprimir el resultado del requerimiento 5
-    dtos, penalty, own_goal =  controller.req_5(control, date_i, date_f , nombre)
+    dtos, penalty, own_goal, tiempo =  controller.req_5(control, date_i, date_f , nombre)
     print(tb.tabulate(dtos["elements"], headers = "keys", tablefmt='grid'))
     print(penalty)
     print(own_goal)
+    print(tiempo)
 
 
 def print_req_6(control):
@@ -200,13 +204,14 @@ def print_req_7(control, tamanio,  date_i, date_f):
         Función que imprime la solución del Requerimiento 7 en consola
     """
     # TODO: Imprimir el resultado del requerimiento 7
-    dtos, players, matches, goals, penalties, own_goals = controller.req_7(control, tamanio,  date_i, date_f)
+    dtos, players, matches, goals, penalties, own_goals, tiempo = controller.req_7(control, tamanio,  date_i, date_f)
     print(tb.tabulate(dtos["elements"], headers = "keys", tablefmt='grid'))
     print(players)
     print(matches)
     print(goals)
     print(penalties)
     print(own_goals)
+    print(tiempo)
 
 
 def print_req_8(control):
