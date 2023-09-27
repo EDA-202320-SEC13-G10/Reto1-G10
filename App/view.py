@@ -139,7 +139,7 @@ def print_req_1(control):
     tipolocal =  input("Team condition: ")
 
     print("Req No. 1 Results".center(130,"="))
-    l1,l2, l3=controller.req_1(control,team_name,tipolocal,n)
+    l1,l2, l3, tiempo=controller.req_1(control,team_name,tipolocal,n)
     print(("Total matches found "+ str(l3)).center(100))
     print(("Selecting "+ str(l2) + " matches...").center(100))
     if l3 > 6:
@@ -148,6 +148,7 @@ def print_req_1(control):
         print("Resultrs struct has less than 6 records...")
     print(tb.tabulate(l1["elements"], headers = "keys" , tablefmt='grid'))
     print(l2)
+    print(tiempo)
     
     
 def print_req_2(control ):
@@ -159,7 +160,7 @@ def print_req_2(control ):
 
     n =  int(input("Number of scorer: "))
     nombre =  input("Player name: ")
-    l1,l2, l3=controller.req_2(control,nombre,n)
+    l1,l2, l3, tiempo=controller.req_2(control,nombre,n)
     print("Req No. 2 Results".center(130,"="))
     print(("Total matches found "+ str(l3)).center(100))
     print(("Selecting "+ str(l2) + " matches...").center(100))
@@ -169,6 +170,7 @@ def print_req_2(control ):
         print("Resultrs struct has less than 6 records...")
     print(tb.tabulate(l1["elements"], headers = "keys", tablefmt='grid'))
     print(l2)
+    print(tiempo)
     
 
 
@@ -182,7 +184,7 @@ def print_req_3(control):
     team_name =  input("Team name: ")
     star_date =  input("Start date: ")
     end_date =  input("End date: ")
-    dtos, home_matchs, away_matchs, total, size = controller.req_3(control,star_date, end_date , team_name)
+    dtos, home_matchs, away_matchs, total, size, tiempo = controller.req_3(control,star_date, end_date , team_name)
     print("Req No. 3 Results".center(130,"="))
     print((team_name + " Total games "+ str(total)).center(100))
     print((team_name + " Total home games "+ str(home_matchs)).center(100))
@@ -193,6 +195,7 @@ def print_req_3(control):
     else:
         print("Resultrs struct has less than 6 records...")
     print(tb.tabulate(dtos["elements"], headers = "keys" , tablefmt='grid'))
+    print(tiempo)
 
 
 def print_req_4(control):
@@ -206,7 +209,7 @@ def print_req_4(control):
     tournamnet_name =  input("Tournamnet name: ")
     star_date =  input("Start date: ")
     end_date =  input("End date: ")
-    dtos, matches, countries, cities, shootouts, size = controller.req_4(control, star_date, end_date, tournamnet_name)
+    dtos, matches, countries, cities, shootouts, size, tiempo = controller.req_4(control, star_date, end_date, tournamnet_name)
     print("Req No. 3 Results".center(130,"="))
     print((tournamnet_name + " Total matches "+ str(matches)).center(100))
     print((tournamnet_name + " Total countries "+ str(countries)).center(100))
@@ -218,6 +221,7 @@ def print_req_4(control):
     else:
         print("Resultrs struct has less than 6 records...")
     print(tb.tabulate(dtos["elements"], headers = "keys" , tablefmt='grid'))
+    print(tiempo)
 
 
 
@@ -231,7 +235,7 @@ def print_req_5(control):
     player_name =  input("Player name: ")
     star_date =  input("Start date: ")
     end_date =  input("End date: ")
-    dtos, penalty, own_goal,goals, size =  controller.req_5(control, star_date, end_date , player_name)
+    dtos, penalty, own_goal,goals, size, tiempo =  controller.req_5(control, star_date, end_date , player_name)
     print("Req No. 3 Results".center(130,"="))
     print((player_name + " Total goals "+ str(goals)).center(100))
     print((player_name + " Total penaltys "+ str(penalty)).center(100))
@@ -242,6 +246,7 @@ def print_req_5(control):
     else:
         print("Resultrs struct has less than 6 records...")
     print(tb.tabulate(dtos["elements"], headers = "keys" , tablefmt='grid'))
+    print(tiempo)
 
 
 
@@ -258,7 +263,7 @@ def print_req_6(control):
     n = int(input("Top N: "))
     star_date =  input("Start date: ")
     end_date =  input("End date: ")
-    u ,n_teams, n_partidos,n_paises,n_ciudades, size_i =  controller.req_6(control,star_date, end_date, tournament_name,n)
+    u ,n_teams, n_partidos,n_paises,n_ciudades, size_i, tiempo =  controller.req_6(control,star_date, end_date, tournament_name,n)
 
     print("Req No. 6 Results".center(130,"="))
     print((tournament_name + " Total teams "+ str(n_teams)).center(100))
@@ -271,6 +276,7 @@ def print_req_6(control):
     else:
         print("Resultrs struct has less than 6 records...")
     print(tb.tabulate(u["elements"], headers = "keys" , tablefmt='grid'))
+    print(tiempo)
 
 
 def print_req_7(control):
@@ -284,7 +290,7 @@ def print_req_7(control):
     tamanio =  int(input("Top N elements: "))
     date_i =  input("Start date: ")
     date_f =  input("End date: ")
-    dtos, players, matches, goals, penalties, own_goals, tiempo = controller.req_7(control, tamanio,  date_i, date_f)
+    dtos, players, matches, goals, penalties, own_goals, size_i, tiempo = controller.req_7(control, tamanio,  date_i, date_f)
     print("Req No. 7 Results".center(130,"="))
     print(("Official tournaments total players: "+ str(players)).center(100))
     print(("Official tournaments total matches: "+ str(matches)).center(100))
@@ -292,11 +298,12 @@ def print_req_7(control):
     print(("Official tournaments total penalties: "+ str(penalties)).center(100))
     print(("Official tournaments total own goals: "+ str(own_goals)).center(100))
     
-    if size > 6:
+    if size_i > 6:
         print("Resultrs struct has more than 6 records...")
     else:
         print("Resultrs struct has less than 6 records...")
     print(tb.tabulate(dtos["elements"], headers = "keys" , tablefmt='grid'))
+    print(tiempo)
 
 
 def print_req_8(control):
@@ -304,8 +311,9 @@ def print_req_8(control):
         Función que imprime la solución del Requerimiento 8 en consola
     """
     # TODO: Imprimir el resultado del requerimiento 8
-    x , y = controller.req_8(control)
+    x , y , tiempo= controller.req_8(control)
     print(tb.tabulate(x["elements"], headers = "keys", tablefmt='grid'))
+    print(tiempo)
 
 
 
