@@ -36,6 +36,7 @@ from DISClib.Algorithms.Sorting import selectionsort as se
 from DISClib.Algorithms.Sorting import mergesort as merg
 from DISClib.Algorithms.Sorting import quicksort as quk
 assert cf
+import tabulate as tb
 
 """
 Se define la estructura de un catálogo de videos. El catálogo tendrá
@@ -411,7 +412,8 @@ def req_7(data_structs, tamanio,  date_i, date_f):
         gs["scored_in_losses"] = sco_values[sc][7]
         gs["scored_in_draws"] = sco_values[sc][8]
         ne = lt.newList("ARRAY_LIST")
-        gs["last_goal"] = lt.addLast(ne,sco_values[sc][9])
+        lt.addLast(ne,sco_values[sc][9])
+        gs["last_goal"] = tb.tabulate(ne["elements"], headers = "keys", tablefmt='grid')
         players += 1
         lt.addLast(nl,gs)
     # Sort
