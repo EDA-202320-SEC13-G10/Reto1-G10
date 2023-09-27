@@ -290,7 +290,7 @@ def print_req_7(control):
     tamanio =  int(input("Top N: "))
     date_i =  input("Start date: ")
     date_f =  input("End date: ")
-    dtos, players, matches, goals, penalties, own_goals, size = controller.req_7(control, tamanio,  date_i, date_f)
+    dtos, players, matches, goals, penalties, own_goals, size, tiempo = controller.req_7(control, tamanio,  date_i, date_f)
     print("Req No. 7 Results".center(130,"="))
     print(("Official tournaments total players: "+ str(players)).center(100))
     print(("Official tournaments total matches: "+ str(matches)).center(100))
