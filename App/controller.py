@@ -112,7 +112,10 @@ def req_1(control, pais, tipolocal, n):
     """
     # TODO: Modificar el requerimiento 1
     result =  control["model"]["results"]
+    start=get_time()
     rq1model = model.req_1(result , pais , tipolocal)
+    end=get_time()
+    tiempo=delta_time(start,end)
     size= model.data_size(rq1model)
     size_i = size
     if size > n:
@@ -131,7 +134,10 @@ def req_2(control, nombre, n):
     Retorna el resultado del requerimiento 2
     """
     goalscorers = control["model"]["goalscorers"]
+    start=get_time()
     rq2model = model.req_2(goalscorers, nombre)
+    end=get_time()
+    tiempo=delta_time(start,end)
     size = model.data_size(rq2model)
     size_i = size
     if size > n:
@@ -169,6 +175,7 @@ def req_4(control, date_i, date_f, tournament):
     Retorna el resultado del requerimiento 4
     """
     # TODO: Modificar el requerimiento 4
+    start=get_time()
     nl, matches, countries, cities, shootouts = model.req_4(control, date_i, date_f, tournament)
     size = model.data_size(nl)
     
@@ -208,8 +215,11 @@ def req_7(control, tamanio,  date_i, date_f):
     Retorna el resultado del requerimiento 7
     """
     # TODO: Modificar el requerimiento 7
+    start=get_time()
     nl, players, matches, goals, penalties, own_goals = model.req_7(control, tamanio,  date_i, date_f)
-    return nl, players, matches, goals, penalties, own_goals
+    end=get_time()
+    tiempo=delta_time(start,end)
+    return nl, players, matches, goals, penalties, own_goals, tiempo
 
 def req_8(control):
     """

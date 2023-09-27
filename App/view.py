@@ -147,6 +147,7 @@ def print_req_1(control):
     else:
         print("Resultrs struct has less than 6 records...")
     print(tb.tabulate(l1["elements"], headers = "keys" , tablefmt='grid'))
+    print(l2)
     
     
 def print_req_2(control ):
@@ -167,7 +168,7 @@ def print_req_2(control ):
     else:
         print("Resultrs struct has less than 6 records...")
     print(tb.tabulate(l1["elements"], headers = "keys", tablefmt='grid'))
-
+    print(l2)
     
 
 
@@ -279,13 +280,14 @@ def print_req_7(control, tamanio,  date_i, date_f):
         
 
     # TODO: Imprimir el resultado del requerimiento 7
-    dtos, players, matches, goals, penalties, own_goals = controller.req_7(control, tamanio,  date_i, date_f)
+    dtos, players, matches, goals, penalties, own_goals, tiempo = controller.req_7(control, tamanio,  date_i, date_f)
     print(tb.tabulate(dtos["elements"], headers = "keys", tablefmt='grid'))
     print(players)
     print(matches)
     print(goals)
     print(penalties)
     print(own_goals)
+    print(tiempo)
 
 
 def print_req_8(control):
