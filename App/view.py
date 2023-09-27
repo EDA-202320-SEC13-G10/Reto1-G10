@@ -296,7 +296,7 @@ def print_req_7(control):
         print("Resultrs struct has more than 6 records...")
     else:
         print("Resultrs struct has less than 6 records...")
-    print(tabulate(dtos["elements"], headers = "keys" , tablefmt='grid'))
+    print(tb.tabulate(dtos["elements"], headers = "keys" , tablefmt='grid'))
 
 
 def print_req_8(control):
