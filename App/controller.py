@@ -151,7 +151,10 @@ def req_3(control,date_i, date_f , team):
     """
     Retorna el resultado del requerimiento 3
     """
+    start=get_time()
     dtos, home_matchs, away_matchs =  model.req_3(control,date_i, date_f , team)
+    end=get_time()
+    delta_time(start,end)
     # TODO: Modificar el requerimiento 3
     total = home_matchs + away_matchs
     
