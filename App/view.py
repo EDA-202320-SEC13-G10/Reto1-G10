@@ -153,11 +153,12 @@ def print_req_3(control,date_i, date_f , team):
         Función que imprime la solución del Requerimiento 3 en consola
     """
     # TODO: Imprimir el resultado del requerimiento 3
-    dtos, home_matchs, away_matchs, total = controller.req_3(control,date_i, date_f , team)
+    dtos, home_matchs, away_matchs, total, tiempo = controller.req_3(control,date_i, date_f , team)
     print(tb.tabulate(dtos["elements"], headers = "keys", tablefmt='grid'))
     print(home_matchs)
     print(away_matchs)
     print(total)
+    print(tiempo)
 
 
 

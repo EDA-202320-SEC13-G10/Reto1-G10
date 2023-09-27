@@ -154,11 +154,11 @@ def req_3(control,date_i, date_f , team):
     start=get_time()
     dtos, home_matchs, away_matchs =  model.req_3(control,date_i, date_f , team)
     end=get_time()
-    delta_time(start,end)
+    tiempo=delta_time(start,end)
     # TODO: Modificar el requerimiento 3
     total = home_matchs + away_matchs
     
-    return dtos, home_matchs, away_matchs, total
+    return dtos, home_matchs, away_matchs, total, tiempo
 
 
 def req_4(control, date_i, date_f, tournament):
