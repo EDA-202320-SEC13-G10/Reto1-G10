@@ -146,7 +146,7 @@ def print_req_1(control):
         print("Resultrs struct has more than 6 records...")
     else:
         print("Resultrs struct has less than 6 records...")
-    print(tabulate(l1["elements"], headers = "keys" , tablefmt='grid'))
+    print(tb.tabulate(l1["elements"], headers = "keys" , tablefmt='grid'))
     
     
 def print_req_2(control ):
@@ -166,7 +166,7 @@ def print_req_2(control ):
         print("Resultrs struct has more than 6 records...")
     else:
         print("Resultrs struct has less than 6 records...")
-    print(tabulate(l1["elements"], headers = "keys", tablefmt='grid'))
+    print(tb.tabulate(l1["elements"], headers = "keys", tablefmt='grid'))
 
     
 
@@ -191,40 +191,85 @@ def print_req_3(control):
         print("Resultrs struct has more than 6 records...")
     else:
         print("Resultrs struct has less than 6 records...")
-    print(tabulate(dtos["elements"], headers = "keys" , tablefmt='grid'))
+    print(tb.tabulate(dtos["elements"], headers = "keys" , tablefmt='grid'))
 
 
-def print_req_4(control, date_i, date_f, tournament):
+def print_req_4(control):
     """
         Función que imprime la solución del Requerimiento 4 en consola
     """
     # TODO: Imprimir el resultado del requerimiento 41
-    dtos, matches, countries, cities, shootouts = controller.req_4(control, date_i, date_f, tournament)
-    print(tb.tabulate(dtos["elements"], headers = "keys", tablefmt="grid"))
-    print(matches)
-    print(countries)
-    print(cities)
-    print(shootouts)
+    
+    print("Req No. 4 Input".center(130,"="))
+
+    tournamnet_name =  input("Tournamnet name: ")
+    star_date =  input("Start date: ")
+    end_date =  input("End date: ")
+    dtos, matches, countries, cities, shootouts, size = controller.req_4(control, star_date, end_date, tournamnet_name)
+    print("Req No. 3 Results".center(130,"="))
+    print((tournamnet_name + " Total matches "+ str(matches)).center(100))
+    print((tournamnet_name + " Total countries "+ str(countries)).center(100))
+    print((tournamnet_name + " Total cities "+ str(cities)).center(100))
+    print((tournamnet_name + " Total cities "+ str(shootouts)).center(100))
+
+    if size > 6:
+        print("Resultrs struct has more than 6 records...")
+    else:
+        print("Resultrs struct has less than 6 records...")
+    print(tb.tabulate(dtos["elements"], headers = "keys" , tablefmt='grid'))
 
 
-def print_req_5(control, date_i, date_f , nombre):
+
+def print_req_5(control):
     """
         Función que imprime la solución del Requerimiento 5 en consola
     """
     # TODO: Imprimir el resultado del requerimiento 5
-    dtos, penalty, own_goal =  controller.req_5(control, date_i, date_f , nombre)
-    print(tabulate(dtos["elements"], headers = "keys", tablefmt='grid'))
-    print(penalty)
-    print(own_goal)
+    print("Req No. 5 Input".center(130,"="))
+
+    player_name =  input("Player name: ")
+    star_date =  input("Start date: ")
+    end_date =  input("End date: ")
+    dtos, penalty, own_goal,goals, size =  controller.req_5(control, star_date, end_date , player_name)
+    print("Req No. 3 Results".center(130,"="))
+    print((player_name + " Total goals "+ str(goals)).center(100))
+    print((player_name + " Total penaltys "+ str(penalty)).center(100))
+    print((player_name + " Total autogoals "+ str(own_goal)).center(100))
+
+    if size > 6:
+        print("Resultrs struct has more than 6 records...")
+    else:
+        print("Resultrs struct has less than 6 records...")
+    print(tb.tabulate(dtos["elements"], headers = "keys" , tablefmt='grid'))
 
 
-def print_req_6(control,date_i, date_f, torneo):
+
+def print_req_6(control):
     """
         Función que imprime la solución del Requerimiento 6 en consola
     """
     # TODO: Imprimir el resultado del requerimiento 6
-    z =  controller.req_6(control,date_i, date_f, torneo)
-    print(tabulate(z["elements"], headers = "keys", tablefmt='grid'))
+
+
+    print("Req No. 6 Input".center(130,"="))
+
+    tournament_name =  input("Tournament name: ")
+    n = int(input("Top N: "))
+    star_date =  input("Start date: ")
+    end_date =  input("End date: ")
+    u ,n_teams, n_partidos,n_paises,n_ciudades, size_i =  controller.req_6(control,star_date, end_date, tournament_name,n)
+
+    print("Req No. 6 Results".center(130,"="))
+    print((tournament_name + " Total teams "+ str(n_teams)).center(100))
+    print((tournament_name + " Total matches "+ str(n_partidos)).center(100))
+    print((tournament_name + " Total countries "+ str(n_paises)).center(100))
+    print((tournament_name + " Total cities "+ str(n_ciudades)).center(100))
+    print((tournament_name + " Total teams "+ str(n_teams)).center(100))
+    if size_i > 6:
+        print("Resultrs struct has more than 6 records...")
+    else:
+        print("Resultrs struct has less than 6 records...")
+    print(tb.tabulate(u["elements"], headers = "keys" , tablefmt='grid'))
 
 
 def print_req_7(control, tamanio,  date_i, date_f):
@@ -249,7 +294,7 @@ def print_req_8(control):
     """
     # TODO: Imprimir el resultado del requerimiento 8
     x , y = controller.req_8(control)
-    print(tabulate(x["elements"], headers = "keys", tablefmt='grid'))
+    print(tb.tabulate(x["elements"], headers = "keys", tablefmt='grid'))
 
 
 
@@ -273,7 +318,8 @@ if __name__ == "__main__":
             print("Cargando información de los archivos ....".center(130))
             print("".center(130,"-"))
             results , goalscorers , shootouts = load_data(control)
-            print_carga(control)
+            print(print_carga(control))
+            
 
         elif int(inputs) == 2:
             print_req_1(control)
@@ -285,13 +331,13 @@ if __name__ == "__main__":
             print_req_3(control)
 
         elif int(inputs) == 5:
-            print_req_4(control, "1955-06-01", "2022-06-30", "Copa América")
+            print_req_4(control)
 
         elif int(inputs) == 6:
-            print_req_5(control, "1999-03-25", "2021-11-23", "Ali Daei")
+            print_req_5(control)
 
         elif int(inputs) == 7:
-            print_req_6(control,"2002-03-25", "2021-11-23", "UEFA Euro qualification")
+            print_req_6(control)
 
         elif int(inputs) == 8:
             print_req_7(control, 17, "2002-01-25", "2021-11-23")

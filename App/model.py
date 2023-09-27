@@ -288,27 +288,8 @@ def req_5(data_structs, date_i, date_f , nombre):
                             goals -=1
                         
                         lt.addLast(nl,i)
-    np= lt.newList("ARRAY_LIST")
-    
-    for i in lt.iterator(nl):
-        x = {}
-        x["date"] = i
-        
-        for j in lt.iterator(results):
-            if i["date"] == j["date"] and i["home_team"] == j["home_team"]  and i["away_team"] == j["away_team"]:
-                x["date"] == i["date"]
-                x["minute"] == i["minute"]
-                x["home_team"] == i["home_team"]
-                x["away_team"] == i["away_team"]
-                x["team"] == i["team"]
-                x["home_score"] == j["home_score"]
-                x["away_score"] == j["away_score"]
-                x["tournament"] == j["tournament"]
-                x["penalty"] == i["penalty"]
-                x["own_goal"] == i["own_goal"]
-                lt.addLast(np,x)
 
-    return nl, penalty, own_goal                     
+    return nl, penalty, own_goal, goals                    
 
 
 def req_6(data_structs ,   date_i, date_f, torneo):
@@ -320,18 +301,35 @@ def req_6(data_structs ,   date_i, date_f, torneo):
     results =sorter_date_country(data_structs["model"]["results"])
     goalscorers = data_structs["model"]["goalscorers"]
     nl =  lt.newList("ARRAY_LIST")
+    pais = lt.newList("ARRAY_LIST")
+    teams = lt.newList("ARRAY_LIST")
+    ciudades = lt.newList("ARRAY_LIST")
     first = time.strptime(date_i, "%Y-%m-%d")
     second = time.strptime(date_f, "%Y-%m-%d")
     for i in lt.iterator(results):
+        
         date_actual = time.strptime(i["date"], "%Y-%m-%d")
         if date_actual > first and date_actual < second:
             if i["tournament"] == torneo:
+                if lt.isPresent(ciudades,i["city"]) == 0:
+                    lt.addLast(ciudades,i["city"])
+                if lt.isPresent(pais,i["country"]) == 0:
+                    lt.addLast(pais,i["country"])
+                if lt.isPresent(teams,i["home_team"]) == 0:
+                    lt.addLast(teams,i["home_team"])
+                if lt.isPresent(teams,i["away_team"]) == 0:
+                    lt.addLast(teams,i["away_team"])
                 lt.addLast(nl,i)
+    n_partidos = data_size(nl)
+    n_teams = data_size(teams)
+    n_paises = data_size(pais)
+    n_ciudades = data_size(ciudades)
+    
     goalscorers = sort_Scorers_by_Resulys(data_structs,nl)
     scorer_a = scorer_avg(goalscorers) 
     u= teams_country(nl,goalscorers,scorer_a)
-    quk.sort(u,cmp_best_teams)
-    return u
+    merg.sort(u,cmp_best_teams)
+    return u ,n_teams, n_partidos,n_paises,n_ciudades
 
 def sort_Scorers_by_Resulys(data_structs , r):
     goalscorers = data_structs["model"]["goalscorers"]
@@ -539,7 +537,7 @@ def req_7(data_structs, tamanio,  date_i, date_f):
         gs["scored_in_losses"] = sco_values[sc][7]
         gs["scored_in_draws"] = sco_values[sc][8]
         ne = lt.newList("ARRAY_LIST")
-        gs["last_goal"] = lt.addLast(ne,sco_values[sc][9])
+        
         players += 1
         lt.addLast(nl,gs)
     # Sort
