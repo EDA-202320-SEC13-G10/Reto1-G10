@@ -281,10 +281,10 @@ def print_req_7(control):
 
     # TODO: Imprimir el resultado del requerimiento 7
     print("Req No. 7 Input".center(130,"="))
-    tamanio =  int(input("Top N elements: "))
+    tamanio =  int(input("Top N: "))
     date_i =  input("Start date: ")
     date_f =  input("End date: ")
-    dtos, players, matches, goals, penalties, own_goals, tiempo = controller.req_7(control, tamanio,  date_i, date_f)
+    dtos, players, matches, goals, penalties, own_goals, size = controller.req_7(control, tamanio,  date_i, date_f)
     print("Req No. 7 Results".center(130,"="))
     print(("Official tournaments total players: "+ str(players)).center(100))
     print(("Official tournaments total matches: "+ str(matches)).center(100))
@@ -296,7 +296,7 @@ def print_req_7(control):
         print("Resultrs struct has more than 6 records...")
     else:
         print("Resultrs struct has less than 6 records...")
-    print(tabulate(dtos["elements"], headers = "keys" , tablefmt='grid'))
+    print(tb.tabulate(dtos["elements"], headers = "keys" , tablefmt='grid'))
 
 
 def print_req_8(control):

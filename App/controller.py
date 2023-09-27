@@ -215,11 +215,9 @@ def req_7(control, tamanio,  date_i, date_f):
     Retorna el resultado del requerimiento 7
     """
     # TODO: Modificar el requerimiento 7
-    start=get_time()
     nl, players, matches, goals, penalties, own_goals = model.req_7(control, tamanio,  date_i, date_f)
-    end=get_time()
-    tiempo=delta_time(start,end)
-    return nl, players, matches, goals, penalties, own_goals, tiempo
+    size = model.data_size(nl)
+    return nl, players, matches, goals, penalties, own_goals, size
 
 def req_8(control):
     """

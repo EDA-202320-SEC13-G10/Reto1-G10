@@ -538,7 +538,8 @@ def req_7(data_structs, tamanio,  date_i, date_f):
         gs["scored_in_losses"] = sco_values[sc][7]
         gs["scored_in_draws"] = sco_values[sc][8]
         ne = lt.newList("ARRAY_LIST")
-        
+        lt.addLast(ne, sco_values[sc][9])
+        gs["last_goal"] = tb.tabulate(ne["elements"], headers = "keys" , tablefmt='grid')
         players += 1
         lt.addLast(nl,gs)
     # Sort
