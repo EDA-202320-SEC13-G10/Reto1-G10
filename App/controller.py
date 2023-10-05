@@ -60,7 +60,7 @@ def load_data(control):
 
 
 def loadRasults(dtos):
-    filename = "football/results-utf8-small.csv"
+    filename = "football/results-utf8-large.csv"
     file = cf.data_dir + filename
     input_file = csv.DictReader(open(file , encoding='utf-8'))
     for data in input_file:
