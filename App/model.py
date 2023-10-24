@@ -753,7 +753,7 @@ def compare_dates_inter(data_1,  data_2):
     y = (data_2["date"])
     first = time.strptime(x, "%Y-%m-%d")
     second = time.strptime(y, "%Y-%m-%d")
-    return first < second
+    return first > second
 
 
 
@@ -783,3 +783,21 @@ def sort(data_structs):
     """
     #TODO: Crear función de ordenamiento
     pass
+def new_tournament():
+    tournaments = {
+        "datos" : None
+    }
+    tournaments["datos"] =  lt.newList("ARRAY_LIST")
+
+    return tournaments
+
+def addtournament(catalog,name,dato):
+    tournaments =  catalog["tournaments"]
+    existtournaments =  mp.contains(tournaments,name)
+    if existtournaments:
+        entry = mp.get(tournaments,name)
+        tournament = me.getValue(entry)
+    else:
+        tournament = new_tournament()
+        mp.put(tournaments,name,tournament)
+    lt.addLast(tournament["datos"],dato)
